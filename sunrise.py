@@ -30,5 +30,6 @@ for x in range(100, 0, -1):  # This Loop will run 100 times
     sleep(0.01) #int(10/n))  # Delay of 10mS
 
 
+
 pwm.stop()  # Stop the PWM
 GPIO.cleanup()  # Make all the output pins LOW
