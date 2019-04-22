@@ -2,15 +2,22 @@ import pigpio
 import numpy as np
 from time import sleep  # Importing sleep from time library
 
-pinNum = 21
-
-pi = pigpio.pi()
-pi.set_mode(pinNum,pigpio.OUTPUT)
-pi.write(pinNum,0)
 
 sunriseDuration = 30 #seconds
 incrementTime = sunriseDuration/256
 dayTime = 2 #seconds
+freq = 300
+
+pinNum = 21
+
+
+
+pi = pigpio.pi()
+pi.set_PWM_frequency(pinNum,freq)
+pi.set_mode(pinNum,pigpio.OUTPUT)
+pi.write(pinNum,0)
+
+
 
 for i in np.linspace(0,255,256):
     i = int(i)
