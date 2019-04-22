@@ -8,10 +8,20 @@ pi = pigpio.pi()
 pi.set_mode(pinNum,pigpio.OUTPUT)
 pi.write(pinNum,0)
 
+sunriseDuration = 30 #seconds
+incrementTime = sunriseDuration/256
+dayTime = 2 #seconds
+
 for i in np.linspace(0,255,256):
     i = int(i)
     pi.set_PWM_dutycycle(pinNum, i)  # PWM off
-    sleep(0.1)
+    sleep(incrementTime)
+sleep(dayTime)
+for i in np.linspace(255,0,256):
+    i = int(i)
+    pi.set_PWM_dutycycle(pinNum, i)  # PWM off
+    sleep(incrementTime)
+
 pi.write(pinNum,0)
 
 #pi.set_PWM_dutycycle(pinNum,   192) # PWM off
