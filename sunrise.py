@@ -10,7 +10,7 @@ from time import sleep  # Importing sleep from time library
 duty_cycle = 100 #final percent duty cycle 0 < dc < 100
 sunrise_period = 30 #seconds
 steptime = 0.01 #time between steps in sunrise/sunset
-int(n) = sunrise_period / steptime
+n = int(sunrise_period / steptime)
 
 
 #Set pins
