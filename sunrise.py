@@ -7,10 +7,9 @@ import RPi.GPIO as GPIO  # Importing RPi library to use the GPIO pins
 from time import sleep  # Importing sleep from time library
 
 
-duty_cycle = 100 #final percent duty cycle 0 < dc < 100
+max_duty_cycle = 100 #final percent duty cycle 0 < dc < 100
 sunrise_period = 30 #seconds
-steptime = 0.01 #time between steps in sunrise/sunset
-n = int(sunrise_period / steptime)
+steptime = sunrise_period/max_duty_cycle #time between steps in sunrise/sunset
 
 
 #Set pins
@@ -20,7 +19,7 @@ GPIO.setwarnings(False)
 GPIO.setup(led_pin, GPIO.OUT)  # Declaring pin 21 as output pin
 pwm = GPIO.PWM(led_pin, 100)  # Created a PWM object with frequency of 100 hz
 pwm.start(0)  # Started PWM at 0% duty cycle
-for x in range(n):
+for x in range(max_duty_cycle):
     pwm.ChangeDutyCycle(x)  # Change duty cycle
     sleep(steptime)  # Delay of 10mS
 try:
@@ -28,7 +27,7 @@ try:
         sleep(1)
 except KeyboardInterrupt:
     pass
-for x in range(n, 0, -1):
+for x in range(max_duty_cycle, 0, -1):
     pwm.ChangeDutyCycle(x)  # Change duty cycle
     sleep(steptime) #int(10/n))  # Delay of 10mS
 
