@@ -6,7 +6,7 @@ from time import sleep  # Importing sleep from time library
 sunriseDuration = 30 #seconds
 incrementTime = sunriseDuration/256
 dayTime = 2 #seconds
-freq = 300
+freq = 500
 
 pinNum = 21
 
