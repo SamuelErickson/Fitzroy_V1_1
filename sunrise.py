@@ -20,9 +20,15 @@ pwm.start(0)  # Started PWM at 0% duty cycle
 for x in range(100):  # This Loop will run 100 times
     pwm.ChangeDutyCycle(x)  # Change duty cycle
     sleep(0.01)  # Delay of 10mS
-sleep(5)
-#        for x in range(100, 0, -1):  # Loop will run 100 times; 100 to 0
-#           pwm.ChangeDutyCycle(x)
-#          sleep(0.01)
-#pwm.stop()  # Stop the PWM
+try:
+    while True:
+        sleep(1)
+except KeyboardInterrupt:
+    pass
+for x in range(100, 0, -1):  # This Loop will run 100 times
+    pwm.ChangeDutyCycle(x)  # Change duty cycle
+    sleep(0.01) #int(10/n))  # Delay of 10mS
+
+
+pwm.stop()  # Stop the PWM
 GPIO.cleanup()  # Make all the output pins LOW
