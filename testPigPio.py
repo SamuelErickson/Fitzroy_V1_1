@@ -3,7 +3,8 @@ from time import sleep  # Importing sleep from time library
 
 pinNum = 21
 
-pi = pigpio.pi(21,pigpio.OUTPUT)
+pi = pigpio.pi()
+pi.set_mode(21,pigpio.OUTPUT)
 pi.write(pinNum,1)
 sleep(2)
 pi.write(pinNum,0)
