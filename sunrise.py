@@ -19,10 +19,10 @@ GPIO.setwarnings(False)
 GPIO.setup(led_pin, GPIO.OUT)  # Declaring pin 21 as output pin
 pwm = GPIO.PWM(led_pin, 100)  # Created a PWM object with frequency of 100 hz
 pwm.start(0)  # Started PWM at 0% duty cycle
-for x in range(max_duty_cycle):
-    pwm.ChangeDutyCycle(x)  # Change duty cycle
-    sleep(steptime)  # Delay of 10mS
 try:
+    for x in range(max_duty_cycle):
+        pwm.ChangeDutyCycle(x)  # Change duty cycle
+        sleep(steptime)  # Delay of 10mS
     while True:
         sleep(1)
 except KeyboardInterrupt:
