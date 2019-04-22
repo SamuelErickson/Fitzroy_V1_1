@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
 
-screen -r led_control
-kill -INT
+screen -S led_control -X at 904 stuff ^C
