@@ -1,7 +1,8 @@
 import pigpio
 import numpy as np
 from time import sleep  # Importing sleep from time library
-from math import sin, pi
+from math import pi
+from math import sin
 
 sunriseDuration = 30 #seconds
 incrementTime = sunriseDuration/256
