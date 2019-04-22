@@ -6,14 +6,12 @@ pinNum = 21
 
 pi = pigpio.pi()
 pi.set_mode(pinNum,pigpio.OUTPUT)
-pi.write(pinNum,1)
-sleep(2)
 pi.write(pinNum,0)
 
 for i in np.linspace(0,255,256):
     i = int(i)
     pi.set_PWM_dutycycle(pinNum, i)  # PWM off
-    sleep(0.2)
+    sleep(0.1)
 pi.write(pinNum,0)
 
 #pi.set_PWM_dutycycle(pinNum,   192) # PWM off
