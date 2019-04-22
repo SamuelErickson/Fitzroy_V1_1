@@ -30,8 +30,8 @@ except KeyboardInterrupt:
 for x in range(max_duty_cycle, 0, -1):
     pwm.ChangeDutyCycle(x)  # Change duty cycle
     sleep(steptime) #int(10/n))  # Delay of 10mS
+finally:
+    pwm.stop()  # Stop the PWM
+    GPIO.cleanup()  # Make all the output pins LOW
 
 
-
-pwm.stop()  # Stop the PWM
-GPIO.cleanup()  # Make all the output pins LOW
