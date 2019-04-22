@@ -20,7 +20,7 @@ pi.write(pinNum,0)
 n = 256
 
 for i in np.linspace(0,255,256):
-    i = int(i*pi/2/n)
+    i = int((i/n)*(pi/2))
     pi.set_PWM_dutycycle(pinNum, i)  # PWM off
     sleep(incrementTime)
 sleep(dayTime)
