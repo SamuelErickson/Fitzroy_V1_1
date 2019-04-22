@@ -9,7 +9,7 @@ from time import sleep  # Importing sleep from time library
 
 max_duty_cycle = 100 #final percent duty cycle 0 < dc < 100
 sunrise_period = 30 #seconds
-steptime = 0.01
+steptime = 0.5
 n = int(sunrise_period/steptime)
 #steptime = sunrise_period/max_duty_cycle #time between steps in sunrise/sunset
 
@@ -25,15 +25,16 @@ try:
     for x in np.linspace(0,100,n):
         pwm.ChangeDutyCycle(x)  # Change duty cycle
         sleep(steptime)  # Delay of 10mS
+    print("sunrise complete")
     while True:
         sleep(1)
 except KeyboardInterrupt:
-    for x in range(max_duty_cycle, 0, -1):
+    for x in np.linspace(100,0,n):
         pwm.ChangeDutyCycle(x)  # Change duty cycle
         sleep(steptime) #int(10/n))  # Delay of 10mS
 finally:
     pwm.stop()  # Stop the PWM
     GPIO.cleanup()  # Make all the output pins LOW
-    print("successfully clean up")
+    print("successfully cleaned up")
 
 
