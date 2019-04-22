@@ -1,7 +1,7 @@
 import pigpio
 import numpy as np
 from time import sleep  # Importing sleep from time library
-
+from math import sin, pi
 
 sunriseDuration = 30 #seconds
 incrementTime = sunriseDuration/256
@@ -17,10 +17,10 @@ pi.set_PWM_frequency(pinNum,freq)
 pi.set_mode(pinNum,pigpio.OUTPUT)
 pi.write(pinNum,0)
 
-
+n = 256
 
 for i in np.linspace(0,255,256):
-    i = int(i)
+    i = int(i*pi/2/n)
     pi.set_PWM_dutycycle(pinNum, i)  # PWM off
     sleep(incrementTime)
 sleep(dayTime)
