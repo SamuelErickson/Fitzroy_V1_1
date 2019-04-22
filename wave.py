@@ -53,7 +53,7 @@ _channels = len(GPIO)
 
 _dc=[0]*_channels
 
-_micros=int(1000000/FREQ)
+_micros=int(1000000/FREQ)-1
 
 old_wid = None
 
