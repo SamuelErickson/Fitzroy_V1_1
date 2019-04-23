@@ -9,11 +9,12 @@ BoxConfig = {'BoxName': ["Box_1"],
                 'Status':["In Development"],
                 'TempSetPoint': [25],
                 'TempLogInterval_sec': [3],
-                'TempDisplayWindow_sec': [60],
+                'TempDisplayWindow_sec': [60*60*24],
                 "Photoperiod (h)":["TBD"],
                 'LightsOnTime': ["TBD"],
                 'LightsOffTime': ["TBD"]
                 }
+# 24 hours display in short term data right now
 
 #Function: Initialize lights!
 timeNow = time.asctime()
