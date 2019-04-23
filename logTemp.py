@@ -6,6 +6,11 @@ if __name__ == "__main__":
     import pandas as pd
     from math import floor
 
+    # Set pins
+    heater_pin = 6
+    fan_pin = 12
+
+
     # find information on box config
     df_config = pd.read_csv('config.csv')
 
@@ -17,10 +22,28 @@ if __name__ == "__main__":
     df_s = pd.read_csv('tempData_shortTerm.csv')
     numSamples = df_s.shape[0] #number of rows of data already stored in short term storage
 
+    #controls
+    tempSetPoint = df_config['TempSetPoint'].values[0]
+    #pi_fan = pigpio.pi()
+   # pi_heater = pigpio.pi()
+
+
+
     pi = pigpio.pi()
     s = DHT22.sensor(pi, 24)
     r = 0
     next_reading = time.time()
+
+    pi.set_mode(fan_pin, pigpio.OUTPUT)
+    pi.set_mode(heater_pin, pigpio.OUTPUT)
+
+    #initialize fan and heater off
+    pi.write(fan_pin, 0)
+    pi.write(heater_pin, 0)
+    HeaterStatus = "OFF"
+    FanStatus =  "OFF"
+
+
     try:
         while True:
             timeStamp = datetime.datetime.now().isoformat()
@@ -30,15 +53,13 @@ if __name__ == "__main__":
             print("{} {} {}".format(timeStamp, s.humidity(), s.temperature()))
             next_reading += INTERVAL
             time.sleep(next_reading-time.time()) # Overall INTERVAL second polling.
-
             vals = {"Time":timeStamp,
                     "TemperatureC":s.temperature(),
                     "Humidity": s.humidity(),
-                    "HeaterStatus": "OFF",
+                    "HeaterStatus": HeaterStatus,
                     "HumidifierStatus": "OFF",
-                    "FanStatus": "OFF"
+                    "FanStatus": FanStatus
                     }
-
             if (numSamples < maxSamples):
                 df_s = df_s.append(vals, ignore_index=True)
                 df_s.to_csv('tempData_shortTerm.csv', index=False)
@@ -47,6 +68,13 @@ if __name__ == "__main__":
                 df_s = df_s.iloc[1:]
                 df_s = df_s.append(vals, ignore_index=True)
                 df_s.to_csv('tempData_shortTerm.csv', index=False)
+            if (vals["TemperatureC"] < tempSetPoint - 1 and (pi.read(heater_pin)==0)):
+                pi.write(heater_pin, 1)
+                HeaterStatus = "ON"
+            elif (vals["TemperatureC"] > tempSetPoint + 1 and (pi.read(heater_pin)==1)):
+                pi.write(heater_pin, 0)
+                HeaterStatus = "OFF"
+
     finally:
         s.cancel()
         pi.stop()
