@@ -25,7 +25,7 @@ df_BoxConfig.to_csv("config.csv",index=False)
 df_TempData_shortTerm = pd.DataFrame(columns=["Time","Temp"])
 df_TempData_shortTerm.to_csv("tempData_shortTerm.csv",index=False)
 
-df_TempData = pd.DataFrame(columns=["Time","Temp"])
+df_TempData = pd.DataFrame(columns=["Time","TemperatureC","Humidity","HeaterStatus","HumidifierStatus","FanStatus"])
 df_TempData.to_csv("tempData.csv",index=False)
 
 print(df_BoxConfig)

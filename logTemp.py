@@ -30,7 +30,15 @@ if __name__ == "__main__":
             print("{} {} {}".format(timeStamp, s.humidity(), s.temperature()))
             next_reading += INTERVAL
             time.sleep(next_reading-time.time()) # Overall INTERVAL second polling.
-            vals = {"Time":timeStamp,"Temp":s.temperature()}
+
+            vals = {"Time":timeStamp,
+                    "TemperatureC":s.temperature(),
+                    "Humidity": s.humidity(),
+                    "HeaterStatus": "OFF",
+                    "HumidifierStatus": "OFF",
+                    "FanStatus": "OFF"
+                    }
+
             if (numSamples < maxSamples):
                 df_s = df_s.append(vals, ignore_index=True)
                 df_s.to_csv('tempData_shortTerm.csv', index=False)
