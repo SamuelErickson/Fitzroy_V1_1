@@ -19,24 +19,27 @@ pi.set_mode(pinNum,pigpio.OUTPUT)
 pi.write(pinNum,0)
 
 n = 256
-
-for i in np.linspace(0,255,256):
-    i = (i/n/2)*piConstant
-    i = int(n*sin(i))
-    pi.set_PWM_dutycycle(pinNum, i)  # PWM off
-    sleep(incrementTime)
-sleep(dayTime)
-for i in np.linspace(255,0,256):
-    i = (i/n) * piConstant/2
-    i = int(n * sin(i))
-    pi.set_PWM_dutycycle(pinNum, i)  # PWM off
-    sleep(incrementTime)
-
+try:
+    for i in np.linspace(0,255,256):
+        i = (i/n/2)*piConstant
+        i = int(n*sin(i))
+        pi.set_PWM_dutycycle(pinNum, i)  # PWM off
+        sleep(incrementTime)
+    sleep(dayTime)
+    for i in np.linspace(255,0,256):
+        i = (i/n) * piConstant/2
+        i = int(n * sin(i))
+        pi.set_PWM_dutycycle(pinNum, i)  # PWM off
+        sleep(incrementTime)
+finally:
+    print("activated finally")
+    pi.write(pinNum, 0)
+    pi.stop()
     #i = int(i)
     #pi.set_PWM_dutycycle(pinNum, 0)  # PWM off
    # sleep(incrementTime)
 
-pi.write(pinNum,0)
+)
 
 #pi.set_PWM_dutycycle(pinNum,   192) # PWM off
 #sleep(1)
@@ -45,4 +48,3 @@ pi.write(pinNum,0)
 #pi.set_PWM_dutycycle(pinNum,   64) # PWM off
 
 #pi.write(pinNum,0)
-pi.stop()
