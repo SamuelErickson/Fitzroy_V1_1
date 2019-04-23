@@ -73,7 +73,7 @@ if __name__ == "__main__":
                 HeaterStatus = "ON"
                 pi.write(fan_pin, 0)
                 FanStatus = "OFF"
-            elif (vals["TemperatureC"] > 22.8 and (pi.read(heater_pin)==1)):
+            elif (vals["TemperatureC"] > 22.8 and (pi.read(fan_pin)==0)):
                 pi.write(heater_pin, 0)
                 HeaterStatus = "OFF"
                 pi.write(fan_pin, 1)
