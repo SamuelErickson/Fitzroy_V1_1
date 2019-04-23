@@ -6,9 +6,15 @@ import sys
 
 if len(sys.argv) >= 4:
     freq = int(sys.argv[3])
-elif len(sys.argv) >= 3:
     dayTime = int(sys.argv[2])
+    sunriseDuration = int(sys.argv[1])
+elif len(sys.argv) >= 3:
+    freq = 500
+    dayTime = int(sys.argv[2])
+    sunriseDuration = int(sys.argv[1])
 elif len(sys.argv) >= 2:
+    dayTime = 0  # seconds
+    freq = 500
     sunriseDuration = int(sys.argv[1])
 else:
     sunriseDuration = 30 #seconds
