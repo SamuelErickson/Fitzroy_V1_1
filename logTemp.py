@@ -15,7 +15,7 @@ if __name__ == "__main__":
     maxSamples = floor(window/INTERVAL) #the number of rows of data to be held in short term storage
 
     df_s = pd.read_csv('tempData_shortTerm.csv')
-    numSamples = df_s[0] #number of rows of data already stored in short term storage
+    numSamples = df_s.shape[0] #number of rows of data already stored in short term storage
 
     pi = pigpio.pi()
     s = DHT22.sensor(pi, 24)
