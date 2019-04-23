@@ -39,7 +39,7 @@ finally:
     #pi.set_PWM_dutycycle(pinNum, 0)  # PWM off
    # sleep(incrementTime)
 
-)
+
 
 #pi.set_PWM_dutycycle(pinNum,   192) # PWM off
 #sleep(1)
