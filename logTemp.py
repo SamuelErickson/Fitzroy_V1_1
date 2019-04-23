@@ -50,7 +50,6 @@ if __name__ == "__main__":
             r += 1
             s.trigger()
             time.sleep(0.2)
-            print("{} {} {}".format(timeStamp, s.humidity(), s.temperature()))
             next_reading += INTERVAL
             time.sleep(next_reading-time.time()) # Overall INTERVAL second polling.
             vals = {"Time":timeStamp,
@@ -60,6 +59,7 @@ if __name__ == "__main__":
                     "HumidifierStatus": "OFF",
                     "FanStatus": FanStatus
                     }
+            print(vals)
             if (numSamples < maxSamples):
                 df_s = df_s.append(vals, ignore_index=True)
                 df_s.to_csv('tempData_shortTerm.csv', index=False)
@@ -68,12 +68,12 @@ if __name__ == "__main__":
                 df_s = df_s.iloc[1:]
                 df_s = df_s.append(vals, ignore_index=True)
                 df_s.to_csv('tempData_shortTerm.csv', index=False)
-            if (vals["TemperatureC"] < 22.8 and (pi.read(heater_pin)==0)):
+            if (vals["TemperatureC"] < 24 and (pi.read(heater_pin)==0)):
                 pi.write(heater_pin, 1)
                 HeaterStatus = "ON"
                 pi.write(fan_pin, 0)
                 FanStatus = "OFF"
-            elif (vals["TemperatureC"] > 22.8 and (pi.read(fan_pin)==0)):
+            elif (vals["TemperatureC"] > 24 and (pi.read(fan_pin)==0)):
                 pi.write(heater_pin, 0)
                 HeaterStatus = "OFF"
                 pi.write(fan_pin, 1)
