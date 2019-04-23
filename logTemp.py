@@ -33,12 +33,12 @@ if __name__ == "__main__":
             vals = {"Time":timeStamp,"Temp":s.temperature()}
             if (numSamples < maxSamples):
                 df_s = df_s.append(vals, ignore_index=True)
-                df_s.to_csv('HumTempData_ShortTerm.csv', index=False)
+                df_s.to_csv('tempData_shortTerm.csv', index=False)
                 numRows = numSamples + 1
             else:
                 df_s = df_s.iloc[1:]
                 df_s = df_s.append(vals, ignore_index=True)
-                df_s.to_csv('HumTempData_ShortTerm.csv', index=False)
+                df_s.to_csv('tempData_shortTerm.csv', index=False)
     finally:
         s.cancel()
         pi.stop()
