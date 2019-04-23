@@ -6,7 +6,7 @@ from math import sin
 
 sunriseDuration = 30 #seconds
 incrementTime = sunriseDuration/256
-dayTime = 2 #seconds
+dayTime = 0 #seconds
 freq = 500
 
 pinNum = 21
@@ -27,9 +27,14 @@ for i in np.linspace(0,255,256):
     sleep(incrementTime)
 sleep(dayTime)
 for i in np.linspace(255,0,256):
-    i = int(i)
+    i = (i/n+1) * piConstant/2
+    i = int(n * sin(i))
     pi.set_PWM_dutycycle(pinNum, i)  # PWM off
     sleep(incrementTime)
+
+    #i = int(i)
+    #pi.set_PWM_dutycycle(pinNum, 0)  # PWM off
+   # sleep(incrementTime)
 
 pi.write(pinNum,0)
 
