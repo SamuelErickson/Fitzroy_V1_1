@@ -68,12 +68,16 @@ if __name__ == "__main__":
                 df_s = df_s.iloc[1:]
                 df_s = df_s.append(vals, ignore_index=True)
                 df_s.to_csv('tempData_shortTerm.csv', index=False)
-            if (vals["TemperatureC"] < tempSetPoint - 1 and (pi.read(heater_pin)==0)):
+            if (vals["TemperatureC"] < 22.8 and (pi.read(heater_pin)==0)):
                 pi.write(heater_pin, 1)
                 HeaterStatus = "ON"
-            elif (vals["TemperatureC"] > tempSetPoint + 1 and (pi.read(heater_pin)==1)):
+                pi.write(fan_pin, 0)
+                FanStatus = "OFF"
+            elif (vals["TemperatureC"] > 22.8 and (pi.read(heater_pin)==1)):
                 pi.write(heater_pin, 0)
                 HeaterStatus = "OFF"
+                pi.write(fan_pin, 1)
+                FanStatus = "ON"
 
     finally:
         s.cancel()
