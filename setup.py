@@ -8,6 +8,8 @@ import time
 BoxConfig = {'BoxName': ["Box_1"],
                 'Status':["In Development"],
                 'TempSetPoint': [25],
+                'TempLogInterval_sec': [3],
+                'TempDisplayWindow_sec': [60],
                 "Photoperiod (h)":["TBD"],
                 'LightsOnTime': ["TBD"],
                 'LightsOffTime': ["TBD"]
@@ -18,10 +20,10 @@ timeNow = time.asctime()
 #CHECK whether light should be on right now or off right now and set up lights...
 
 df_BoxConfig = pd.DataFrame(data=BoxConfig)
-df_BoxConfig.to_csv("tankConfig.csv",index=False)
+df_BoxConfig.to_csv("config.csv",index=False)
 
 df_TempData_shortTerm = pd.DataFrame(columns=["Time","Temp"])
-df_TempData_shortTerm.to_csv("TempData_shortTerm.csv",index=False)
+df_TempData_shortTerm.to_csv("tempData_shortTerm.csv",index=False)
 
 df_TempData = pd.DataFrame(columns=["Time","Temp"])
 df_TempData.to_csv("tempData.csv",index=False)
