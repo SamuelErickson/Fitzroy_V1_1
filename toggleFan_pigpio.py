@@ -5,10 +5,10 @@ A script for recording heating and cooling curves
 
 if __name__ == "__main__":
     from time import sleep
-    import datetime
+    #import datetime
     import pigpio
-    import DHT22
-    import pandas as pd
+    #import DHT22
+    #import pandas as pd
     from math import floor
 
     # Set pins
@@ -37,7 +37,7 @@ if __name__ == "__main__":
             pi.write(heater_pin, 1)
             HeaterStatus = "ON"
             print("Heat is " + HeaterStatus)
-            sleep(1)
+            sleep(15)
         elif pi.read(heater_pin) == 1:
             pi.write(heater_pin, 0)
             HeaterStatus = "OFF"
