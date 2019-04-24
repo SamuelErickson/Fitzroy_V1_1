@@ -12,7 +12,7 @@ if __name__ == "__main__":
     from math import floor
 
     # Set pins
-    heater_pin = 4
+    heater_pin = 27
     fan_pin = 17
 
 
