@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
-pinNum = 6
+pinNum = 4
 GPIO.setup(pinNum,GPIO.OUT)
 
 
