@@ -12,8 +12,8 @@ if __name__ == "__main__":
     from math import floor
 
     # Set pins
-    heater_pin = 6
-    fan_pin = 12
+    heater_pin = 4
+    fan_pin = 17
 
 
     # find information on box config
