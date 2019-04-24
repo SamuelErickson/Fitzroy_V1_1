@@ -31,7 +31,20 @@ if __name__ == "__main__":
         pi.write(fan_pin, 1)
         FanStatus =  "ON"
         print("Fan is "+FanStatus)
-        sleep(4)
+        sleep(2)
+    for i in range(4):
+        if pi.read(heater_pin) == 0:
+            pi.write(heater_pin, 1)
+            HeaterStatus = "ON"
+            print("Heat is " + HeaterStatus)
+            sleep(1)
+        elif pi.read(heater_pin) == 1:
+            pi.write(heater_pin, 0)
+            HeaterStatus = "OFF"
+            print("Heat is " + HeaterStatus)
+            sleep(1)
+        else:
+            print("error")
 
 
     # if (HeaterStatus == "OFF"):
