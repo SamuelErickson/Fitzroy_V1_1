@@ -12,8 +12,13 @@ BoxConfig = {'BoxName': ["Box_1"],
                 'TempDisplayWindow_sec': [60*60*24],
                 "Photoperiod (h)":["TBD"],
                 'LightsOnTime': ["TBD"],
-                'LightsOffTime': ["TBD"]
-                }
+                'LightsOffTime': ["TBD"],
+                'heater_pin': [4],
+                'fan_pin': [17],
+                 'light_pin': ["TBD"],
+                 'humidifier_pin': ["TBD"],
+                    'DHT22_pin': ["TBD"]
+             }
 # 24 hours display in short term data right now
 
 #Function: Initialize lights!
