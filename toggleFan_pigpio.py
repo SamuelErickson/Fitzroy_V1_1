@@ -30,6 +30,7 @@ if __name__ == "__main__":
     pi.write(fan_pin, 1)
     FanStatus =  "ON"
     print("Fan is "+FanStatus)
+    sleep(4)
 
 
 
