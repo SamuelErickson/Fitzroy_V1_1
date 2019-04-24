@@ -81,7 +81,9 @@ if __name__ == "__main__":
                 pi.write(heater_pin, 1)
                 HeaterStatus = "ON"
                 i = i+1
+
                 tempSetPoint = tempSetPointList[i]
+                print("i = "+str(i)+" tempsetpoint:"+str(tempSetPoint))
                 #pi.write(fan_pin, 0)
                 #FanStatus = "OFF"
             elif (vals["TemperatureC"] > tempSetPoint and (pi.read(heater_pin)==1)):
@@ -89,6 +91,7 @@ if __name__ == "__main__":
                 HeaterStatus = "OFF"
                 i = i+1
                 tempSetPoint = tempSetPointList[i]
+                print("i = " + str(i) + " tempsetpoint:" + str(tempSetPoint))
                 #pi.write(fan_pin, 1)
                 #FanStatus = "ON"
 
