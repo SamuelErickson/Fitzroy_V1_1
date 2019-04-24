@@ -4,7 +4,7 @@ A script for recording heating and cooling curves
 """
 
 if __name__ == "__main__":
-    import time
+    from time import sleep
     import datetime
     import pigpio
     import DHT22
