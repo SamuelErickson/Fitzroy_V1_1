@@ -106,6 +106,8 @@ if __name__ == "__main__":
                 dutyCycle = 0.5 - k2*slope
             if dutyCycle > 1:
                 dutyCycle = 1
+            elif dutyCycle < 0:
+                dutyCycle = 0
             tempPrev = temp
 
             # dutyCycle = error*k
