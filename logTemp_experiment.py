@@ -39,12 +39,15 @@ if __name__ == "__main__":
 
 
     pi = pigpio.pi()
+
     s = DHT22.sensor(pi, 24)
     r = 0
     next_reading = time.time()
 
     pi.set_mode(fan_pin, pigpio.OUTPUT)
     pi.set_mode(heater_pin, pigpio.OUTPUT)
+
+
 
     #initialize fan and heater off
     pi.write(fan_pin, 0)
