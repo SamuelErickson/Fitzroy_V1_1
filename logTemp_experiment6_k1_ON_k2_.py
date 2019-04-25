@@ -20,8 +20,8 @@ if __name__ == "__main__":
     df_config = pd.read_csv('config.csv')
 
     # Intervals of about 2 seconds or less will eventually hang the DHT22.
-    INTERVAL = df_config["TempLogInterval_sec"]
-    window = df_config["TempDisplayWindow_sec"]
+    INTERVAL = df_config["TempLogInterval_sec"].values[0]
+    window = df_config["TempDisplayWindow_sec"].values[0]
     maxSamples = floor(window/INTERVAL) #the number of rows of data to be held in short term storage
 
     df_s = pd.read_csv('tempData_shortTerm.csv')
@@ -106,7 +106,7 @@ if __name__ == "__main__":
                 dutyCycle = 0.5 - k2*slope
             if dutyCycle > 1:
                 dutyCycle = 1
-
+            tempPrev = temp
 
             # dutyCycle = error*k
             # if dutyCycle > 0.9:
