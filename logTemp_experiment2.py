@@ -32,7 +32,7 @@ if __name__ == "__main__":
     #tempSetPointList = [26,28,30,32,34]
     i = 0
     tempSetPoint = 26 #tempSetPointList[i]
-    margin = 0.2
+    margin = 0
 
     #pi_fan = pigpio.pi()
    # pi_heater = pigpio.pi()
