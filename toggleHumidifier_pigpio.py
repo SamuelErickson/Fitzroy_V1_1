@@ -26,23 +26,23 @@ if __name__ == "__main__":
     HumidifierStatus = "OFF"
     FanStatus =  "OFF"
 
-    sleep(2)
+
     if pi.read(humidifier_pin) == 0:
         pi.write(humidifier_pin, 1)
         FanStatus =  "ON"
-        print("Fan is "+FanStatus)
-        sleep(2)
+        print("Humidifier is "+HumidifierStatus)
+        sleep(3)
     for i in range(4):
         if pi.read(humidifier_pin) == 0:
             pi.write(humidifier_pin, 1)
             HumidifierStatus = "ON"
-            print("Heat is " + HumidifierStatus)
-            sleep(15)
+            print("Humidifier is " + HumidifierStatus)
+            sleep(3)
         elif pi.read(humidifier_pin) == 1:
             pi.write(humidifier_pin, 0)
             HumidifierStatus = "OFF"
-            print("Heat is " + HumidifierStatus)
-            sleep(1)
+            print("Humidifier is " + HumidifierStatus)
+            sleep(3)
         else:
             print("error")
 
