@@ -138,7 +138,7 @@ if __name__ == "__main__":
                      tempSetPoint = 32
                  elif r == 1200 * 16:
                      tempSetPoint = 28
-                 elif r == 1200 * 18:
+                 elif r == 1200 * 20:
                      tempSetPoint = 24
 
     finally:
