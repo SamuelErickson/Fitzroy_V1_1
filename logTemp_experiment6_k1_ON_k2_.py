@@ -65,7 +65,11 @@ if __name__ == "__main__":
             s.trigger()
             time.sleep(0.2)
             next_reading += INTERVAL
-            time.sleep(next_reading-time.time()) # Overall INTERVAL second polling.
+            sleepTime = next_reading-time.time()
+            if sleepTime < 0:
+                time.sleep(3)
+            else:
+                time.sleep(sleepTime) # Overall INTERVAL second polling.
             temp = s.temperature()
             vals = {"Time":timeStamp,
                     "TemperatureC":temp,
