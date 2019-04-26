@@ -21,55 +21,48 @@ if __name__ == "__main__":
     pi.set_mode(heater_pin, pigpio.OUTPUT)
 
     #initialize fan and heater off
-    pi.write(humidifier_pin, 0)
-    pi.write(heater_pin, 0)
-    HumidifierStatus = "OFF"
-    FanStatus =  "OFF"
+    #pi.write(humidifier_pin, 0)
+    #pi.write(heater_pin, 0)
+    #HumidifierStatus = "OFF"
+    #FanStatus =  "OFF"
+
 
 
     if pi.read(humidifier_pin) == 0:
         pi.write(humidifier_pin, 1)
-        HumidifierStatus =  "ON"
-        print("Humidifier is "+HumidifierStatus)
-        sleep(3)
-    for i in range(4):
-        if pi.read(humidifier_pin) == 0:
-            pi.write(humidifier_pin, 1)
-            HumidifierStatus = "ON"
-            print("Humidifier is " + HumidifierStatus)
-            sleep(3)
-        elif pi.read(humidifier_pin) == 1:
-            pi.write(humidifier_pin, 0)
-            HumidifierStatus = "OFF"
-            print("Humidifier is " + HumidifierStatus)
-            sleep(3)
-        else:
-            print("error")
+        HumidifierStatus = "ON"
+        print("Humidifier is " + HumidifierStatus)
+    elif pi.read(humidifier_pin) == 1:
+        pi.write(humidifier_pin, 0)
+        HumidifierStatus = "OFF"
+        print("Humidifier is " + HumidifierStatus)
+    else:
+        print("error")
 
 
-    # if (HumidifierStatus == "OFF"):
-    #     pi.write(heater_pin, 1)
-    #     HumidifierStatus = "ON"
-    #     i = i+1
-    #
-    #     tempSetPoint = tempSetPointList[i]
-    #     print("i = "+str(i)+" tempsetpoint:"+str(tempSetPoint))
-    #     #pi.write(humidifier_pin, 0)
-    #     #FanStatus = "OFF"
-    # elif (vals["TemperatureC"] > tempSetPoint and (HumidifierStatus == "ON")):
-    #     pi.write(heater_pin, 0)
-    #     HumidifierStatus = "OFF"
-    #     i = i+1
-    #     tempSetPoint = tempSetPointList[i]
-    #     print("i = " + str(i) + " tempsetpoint:" + str(tempSetPoint))
-    #     #pi.write(humidifier_pin, 1)
-    #     #FanStatus = "ON"
+    # if pi.read(humidifier_pin) == 0:
+    #     pi.write(humidifier_pin, 1)
+    #     HumidifierStatus =  "ON"
+    #     print("Humidifier is "+HumidifierStatus)
+    #     sleep(3)
+    # for i in range(4):
+    #     if pi.read(humidifier_pin) == 0:
+    #         pi.write(humidifier_pin, 1)
+    #         HumidifierStatus = "ON"
+    #         print("Humidifier is " + HumidifierStatus)
+    #         sleep(3)
+    #     elif pi.read(humidifier_pin) == 1:
+    #         pi.write(humidifier_pin, 0)
+    #         HumidifierStatus = "OFF"
+    #         print("Humidifier is " + HumidifierStatus)
+    #         sleep(3)
+    #     else:
+    #         print("error")
 
+    #pi.write(heater_pin, 0)
+    #pi.write(humidifier_pin, 0)
+   # FanStatus =  "OFF"
 
-    pi.write(heater_pin, 0)
-    pi.write(humidifier_pin, 0)
-    FanStatus =  "OFF"
-
-    print("Fan is "+FanStatus)
+    #print("Fan is "+FanStatus)
 
     pi.stop()
