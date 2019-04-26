@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     if pi.read(humidifier_pin) == 0:
         pi.write(humidifier_pin, 1)
-        FanStatus =  "ON"
+        HumidifierStatus =  "ON"
         print("Humidifier is "+HumidifierStatus)
         sleep(3)
     for i in range(4):
