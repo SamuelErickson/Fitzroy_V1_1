@@ -38,8 +38,8 @@ if __name__ == "__main__":
     k = 1 #proportional control coefficient, if temp is one degree celcius below set point, turn on 100%
     #pi_fan = pigpio.pi()
     # pi_heater = pigpio.pi()
-
-
+    rt = 24 #room temp
+    k2 = 7.14
 
     pi = pigpio.pi()
     s = DHT22.sensor(pi, 24)
@@ -98,7 +98,6 @@ if __name__ == "__main__":
             dT = temp - tempPrev
             slope = dT/(INTERVAL/60) # in degC / minute
 
-            k2 = 7.14
 
             if error < 0:
                 dutyCycle = 1
@@ -130,19 +129,18 @@ if __name__ == "__main__":
             #     HeaterStatus = "OFF"
             #     #pi.write(fan_pin, 1)
             #     #FanStatus = "ON"
-            # if r % 1200 == 0: # every hour
-            #     if r == 1200 * 2:
-            #         tempSetPoint = 30
-            #     elif r == 1200 * 4:
-            #         tempSetPoint = 28
-            #     elif r == 1200 * 6:
-            #         tempSetPoint = 26
-            #     elif r == 1200 * 8:
-            #         tempSetPoint = 24
-            #     elif r == 1200 * 10:
-            #         tempSetPoint = 22
-            #     elif r == 1200 * 12:
-            #         tempSetPoint = 20
+            if r % 1200 == 0: # every hour
+                 if r == 1200 * 4:
+                     tempSetPoint = 34
+                 elif r == 1200 * 8:
+                     tempSetPoint = 26
+                 elif r == 1200 * 12:
+                     tempSetPoint = 32
+                 elif r == 1200 * 16:
+                     tempSetPoint = 28
+                 elif r == 1200 * 18:
+                     tempSetPoint = 24
+
     finally:
         pi.write(heater_pin, 0)
         pi.write(fan_pin, 0)
