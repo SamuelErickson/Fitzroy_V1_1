@@ -1,1 +1,4 @@
 python3-pandas
+time
+datetime
+pigpio
