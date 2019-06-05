@@ -70,6 +70,7 @@ if __name__ == "__main__":
     try:
         while True:
             # measure time, temperature, humidity
+            timeCurrent = datetime.datetime.now()
             timeStamp = datetime.datetime.now().isoformat()
             r += 1
             s.trigger()

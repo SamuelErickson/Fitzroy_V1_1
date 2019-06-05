@@ -7,4 +7,4 @@
 
 # initialize the pippio daemon, which operates the input-output pins
 sudo pigpiod
-screen -d -m -S FitzroyBox bash -c "python3 sunrisesunset_demo.py 1 1 500"
+screen -d -m -S FitzroyBox bash -c "logTemp_exp7_24hours.py 28"
