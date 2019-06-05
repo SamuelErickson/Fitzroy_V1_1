@@ -17,7 +17,7 @@ means on at 8:30 AM, off at 8:45 PM
 """
 
 #
-sunriseDuration = 60
+sunriseDuration = 10
 freq = 500
 
 hourOn = int(sys.argv[1])
