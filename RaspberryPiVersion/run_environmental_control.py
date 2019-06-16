@@ -1,32 +1,49 @@
-"""
-A script for recording heating and cooling curves
+""" This script runs continuously on a raspberry pi controlling a single box in a
+Fitzroy system. This script reads a DHT22 and controls a heating element to control temperature
+This script should run inside of a linux screen so as to ensure it continues running after a user
+has initialized it.
 
+Arguments:
+    The first positional argument is a floating point number, the target temperature in C
+    The second positional argument is a float, the fan duty cycle from 0 - 1.
+
+Note:
+    This script must be in the same folder as the configuration file
+    config.csv so it can pull pin number values and other such information.
+
+Example:
+    to set to 28 C, 50% fan power, enter following line in raspberry pi terminal:
+    python3 run_environmental_control.py 28 0.5
 """
+
+import time
+import datetime
+import pigpio
+from RaspberryPiVersion import DHT22
+import pandas as pd
+from math import floor
+import sys
+
+
+def initialize():
+    """ Code that runs once upon startup. Pulls information on
+    box configuration from config.csv.
+    """
+
+    #pull
+    tempSetPoint = int(sys.argv[1])
+    fanDC = int(sys.argv[1])
 
 if __name__ == "__main__":
-    import time
-    import datetime
-    import pigpio
-    import DHT22
-    import pandas as pd
-    from math import floor
-    import sys
-
-    """
-    This script reads a DHT22 and controls a heating element to control temperature
-    The first argument is a floating point number, the target temperature
-    The second argument is a float, the fan duty cycle
-    Example, to set to 28 C, 50% fan power
-    python3 scriptName.py 28 0.5
-    """
 
 
-    tempSetPoint = int(sys.argv[1])
-    #fanDC = int(sys.argv[1])
+
+
 
 
     # Set pins
     df_config = pd.read_csv('config.csv')
+
     fan_pin = int(df_config["fan_pin"].iloc[0])
     heater_pin = int(df_config["heater_pin"].iloc[0])
     humidifier_pin = int(df_config["humidifier_pin"].iloc[0])
@@ -34,8 +51,6 @@ if __name__ == "__main__":
     DHT22_pin = int(df_config["DHT22_pin"].iloc[0])
 
 
-    # find information on box config
-    df_config = pd.read_csv('config.csv')
 
     # Intervals of about 2 seconds or less will eventually hang the DHT22.
     INTERVAL = df_config["TempLogInterval_sec"].values[0]

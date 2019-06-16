@@ -7,7 +7,7 @@ if __name__ == "__main__":
     import time
     import datetime
     import pigpio
-    import DHT22
+    from RaspberryPiVersion import DHT22
     import pandas as pd
     from math import floor
 
@@ -20,8 +20,8 @@ if __name__ == "__main__":
     df_config = pd.read_csv('config.csv')
 
     # Intervals of about 2 seconds or less will eventually hang the DHT22.
-    INTERVAL = df_config["TempLogInterval_sec"]
-    window = df_config["TempDisplayWindow_sec"]
+    INTERVAL = df_config["TempLogInterval_sec"].values[0]
+    window = df_config["TempDisplayWindow_sec"].values[0]
     maxSamples = floor(window/INTERVAL) #the number of rows of data to be held in short term storage
 
     df_s = pd.read_csv('tempData_shortTerm.csv')
@@ -38,8 +38,8 @@ if __name__ == "__main__":
     k = 1 #proportional control coefficient, if temp is one degree celcius below set point, turn on 100%
     #pi_fan = pigpio.pi()
     # pi_heater = pigpio.pi()
-
-
+    rt = 24 #room temp
+    k2 = 7.14
 
     pi = pigpio.pi()
     s = DHT22.sensor(pi, 24)
@@ -55,7 +55,7 @@ if __name__ == "__main__":
     pi.write(heater_pin, 0)
     HeaterStatus = "OFF"
     FanStatus =  "OFF"
-
+    tempPrev = 25
 
     try:
         while True:
@@ -65,9 +65,14 @@ if __name__ == "__main__":
             s.trigger()
             time.sleep(0.2)
             next_reading += INTERVAL
-            time.sleep(next_reading-time.time()) # Overall INTERVAL second polling.
+            sleepTime = next_reading-time.time()
+            if sleepTime < 0:
+                time.sleep(3)
+            else:
+                time.sleep(sleepTime) # Overall INTERVAL second polling.
+            temp = s.temperature()
             vals = {"Time":timeStamp,
-                    "TemperatureC":s.temperature(),
+                    "TemperatureC":temp,
                     "Humidity": s.humidity(),
                     "HeaterStatus": HeaterStatus,
                     "HumidifierStatus": "OFF",
@@ -91,12 +96,28 @@ if __name__ == "__main__":
 
             # make control adjustments
 
-            error = tempSetPoint - vals["TemperatureC"]
-            dutyCycle = error*k
-            if dutyCycle > 0.9:
+
+            error = temp-tempSetPoint
+
+            dT = temp - tempPrev
+            slope = dT/(INTERVAL/60) # in degC / minute
+
+
+            if error < 0:
                 dutyCycle = 1
-            elif dutyCycle < 0.1:
-                dutyCycle =0
+            else:
+                dutyCycle = 0.5 - k2*slope
+            if dutyCycle > 1:
+                dutyCycle = 1
+            elif dutyCycle < 0:
+                dutyCycle = 0
+            tempPrev = temp
+
+            # dutyCycle = error*k
+            # if dutyCycle > 0.9:
+            #     dutyCycle = 1
+            # elif dutyCycle < 0.1:
+            #     dutyCycle =0
 
             pulseWidth = dutyCycle*255
             pi.set_PWM_dutycycle(heater_pin, pulseWidth)
@@ -112,19 +133,18 @@ if __name__ == "__main__":
             #     HeaterStatus = "OFF"
             #     #pi.write(fan_pin, 1)
             #     #FanStatus = "ON"
-            # if r % 1200 == 0: # every hour
-            #     if r == 1200 * 2:
-            #         tempSetPoint = 30
-            #     elif r == 1200 * 4:
-            #         tempSetPoint = 28
-            #     elif r == 1200 * 6:
-            #         tempSetPoint = 26
-            #     elif r == 1200 * 8:
-            #         tempSetPoint = 24
-            #     elif r == 1200 * 10:
-            #         tempSetPoint = 22
-            #     elif r == 1200 * 12:
-            #         tempSetPoint = 20
+            if r % 1200 == 0: # every hour
+                 if r == 1200 * 4:
+                     tempSetPoint = 34
+                 elif r == 1200 * 8:
+                     tempSetPoint = 26
+                 elif r == 1200 * 12:
+                     tempSetPoint = 32
+                 elif r == 1200 * 16:
+                     tempSetPoint = 28
+                 elif r == 1200 * 20:
+                     tempSetPoint = 24
+
     finally:
         pi.write(heater_pin, 0)
         pi.write(fan_pin, 0)

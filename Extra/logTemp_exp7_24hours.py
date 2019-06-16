@@ -7,13 +7,31 @@ if __name__ == "__main__":
     import time
     import datetime
     import pigpio
-    import DHT22
+    from RaspberryPiVersion import DHT22
     import pandas as pd
     from math import floor
+    import sys
+
+    """
+    This script reads a DHT22 and controls a heating element to control temperature
+    The first argument is a floating point number, the target temperature
+    The second argument is a float, the fan duty cycle
+    Example, to set to 28 C, 50% fan power
+    python3 scriptName.py 28 0.5
+    """
+
+
+    tempSetPoint = int(sys.argv[1])
+    #fanDC = int(sys.argv[1])
+
 
     # Set pins
-    heater_pin = 27
-    fan_pin = 17
+    df_config = pd.read_csv('config.csv')
+    fan_pin = int(df_config["fan_pin"].iloc[0])
+    heater_pin = int(df_config["heater_pin"].iloc[0])
+    humidifier_pin = int(df_config["humidifier_pin"].iloc[0])
+    light_pin = int(df_config["light_pin"].iloc[0])
+    DHT22_pin = int(df_config["DHT22_pin"].iloc[0])
 
 
     # find information on box config
@@ -31,7 +49,7 @@ if __name__ == "__main__":
     #tempSetPoint = df_config['TempSetPoint'].values[0]
     #tempSetPointList = [26,28,30,32,34]
     i = 0
-    tempSetPoint = 30 #tempSetPointList[i]
+    #tempSetPoint = 30 #tempSetPointList[i]
     margin = 0
 
     freq = 10
@@ -42,7 +60,7 @@ if __name__ == "__main__":
     k2 = 7.14
 
     pi = pigpio.pi()
-    s = DHT22.sensor(pi, 24)
+    s = DHT22.sensor(pi, DHT22_pin)
     r = 0
     next_reading = time.time()
 
@@ -52,14 +70,16 @@ if __name__ == "__main__":
 
     #initialize fan and heater off
     pi.write(fan_pin, 0)
+    pi.write(fan_pin, 1)
     pi.write(heater_pin, 0)
     HeaterStatus = "OFF"
-    FanStatus =  "OFF"
+    FanStatus =  "ON"
     tempPrev = 25
 
     try:
         while True:
             # measure time, temperature, humidity
+            timeCurrent = datetime.datetime.now()
             timeStamp = datetime.datetime.now().isoformat()
             r += 1
             s.trigger()
@@ -133,17 +153,7 @@ if __name__ == "__main__":
             #     HeaterStatus = "OFF"
             #     #pi.write(fan_pin, 1)
             #     #FanStatus = "ON"
-            if r % 1200 == 0: # every hour
-                 if r == 1200 * 4:
-                     tempSetPoint = 34
-                 elif r == 1200 * 8:
-                     tempSetPoint = 26
-                 elif r == 1200 * 12:
-                     tempSetPoint = 32
-                 elif r == 1200 * 16:
-                     tempSetPoint = 28
-                 elif r == 1200 * 20:
-                     tempSetPoint = 24
+
 
     finally:
         pi.write(heater_pin, 0)

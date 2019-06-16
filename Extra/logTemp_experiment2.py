@@ -7,7 +7,7 @@ if __name__ == "__main__":
     import time
     import datetime
     import pigpio
-    import DHT22
+    from RaspberryPiVersion import DHT22
     import pandas as pd
     from math import floor
 
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     #tempSetPoint = df_config['TempSetPoint'].values[0]
     #tempSetPointList = [26,28,30,32,34]
     i = 0
-    tempSetPoint = 32 #tempSetPointList[i]
+    tempSetPoint = 26 #tempSetPointList[i]
     margin = 0
 
     #pi_fan = pigpio.pi()
@@ -89,18 +89,18 @@ if __name__ == "__main__":
                 #pi.write(fan_pin, 1)
                 #FanStatus = "ON"
             if r % 1200 == 0: # every hour
-                if r == 1200 * 2:
-                    tempSetPoint = 30
-                elif r == 1200 * 4:
+                if r == 1200 * 1:
                     tempSetPoint = 28
+                elif r == 1200 * 2:
+                    tempSetPoint = 30
+                elif r == 1200 * 3:
+                    tempSetPoint = 32
+                elif r == 1200 * 4:
+                    tempSetPoint = 34
+                elif r == 1200 * 5:
+                    tempSetPoint = 34
                 elif r == 1200 * 6:
                     tempSetPoint = 26
-                elif r == 1200 * 8:
-                    tempSetPoint = 24
-                elif r == 1200 * 10:
-                    tempSetPoint = 22
-                elif r == 1200 * 12:
-                    tempSetPoint = 20
     finally:
         pi.write(heater_pin, 0)
         pi.write(fan_pin, 0)

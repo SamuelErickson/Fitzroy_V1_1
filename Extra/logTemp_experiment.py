@@ -7,7 +7,7 @@ if __name__ == "__main__":
     import time
     import datetime
     import pigpio
-    import DHT22
+    from RaspberryPiVersion import DHT22
     import pandas as pd
     from math import floor
 
@@ -28,11 +28,10 @@ if __name__ == "__main__":
     numSamples = df_s.shape[0] #number of rows of data already stored in short term storage
 
     #controls
-    #tempSetPoint = df_config['TempSetPoint'].values[0]
-    #tempSetPointList = [26,28,30,32,34]
+    tempSetPoint = df_config['TempSetPoint'].values[0]
+    tempSetPointList = [28,28,26,32.5,26,35,26]
     i = 0
-    tempSetPoint = 26 #tempSetPointList[i]
-    margin = 0
+    tempSetPoint = tempSetPointList[i]
 
     #pi_fan = pigpio.pi()
    # pi_heater = pigpio.pi()
@@ -40,12 +39,15 @@ if __name__ == "__main__":
 
 
     pi = pigpio.pi()
+
     s = DHT22.sensor(pi, 24)
     r = 0
     next_reading = time.time()
 
     pi.set_mode(fan_pin, pigpio.OUTPUT)
     pi.set_mode(heater_pin, pigpio.OUTPUT)
+
+
 
     #initialize fan and heater off
     pi.write(fan_pin, 0)
@@ -78,29 +80,24 @@ if __name__ == "__main__":
                 df_s = df_s.iloc[1:]
                 df_s = df_s.append(vals, ignore_index=True)
                 df_s.to_csv('tempData_shortTerm.csv', index=False)
-            if (vals["TemperatureC"] < tempSetPoint-margin and (HeaterStatus == "OFF")):
+            if (vals["TemperatureC"] <= tempSetPoint and (HeaterStatus == "OFF")):
                 pi.write(heater_pin, 1)
                 HeaterStatus = "ON"
+                i = i+1
+
+                tempSetPoint = tempSetPointList[i]
+                print("i = "+str(i)+" tempsetpoint:"+str(tempSetPoint))
                 #pi.write(fan_pin, 0)
                 #FanStatus = "OFF"
-            elif (vals["TemperatureC"] > tempSetPoint+margin and (HeaterStatus == "ON")):
+            elif (vals["TemperatureC"] > tempSetPoint and (HeaterStatus == "ON")):
                 pi.write(heater_pin, 0)
                 HeaterStatus = "OFF"
+                i = i+1
+                tempSetPoint = tempSetPointList[i]
+                print("i = " + str(i) + " tempsetpoint:" + str(tempSetPoint))
                 #pi.write(fan_pin, 1)
                 #FanStatus = "ON"
-            if r % 1200 == 0: # every hour
-                if r == 1200 * 1:
-                    tempSetPoint = 28
-                elif r == 1200 * 2:
-                    tempSetPoint = 30
-                elif r == 1200 * 3:
-                    tempSetPoint = 32
-                elif r == 1200 * 4:
-                    tempSetPoint = 34
-                elif r == 1200 * 5:
-                    tempSetPoint = 34
-                elif r == 1200 * 6:
-                    tempSetPoint = 26
+
     finally:
         pi.write(heater_pin, 0)
         pi.write(fan_pin, 0)
