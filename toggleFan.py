@@ -1,7 +1,12 @@
 import RPi.GPIO as GPIO
+import pandas as pd
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 pinNum = 17
+
+df_config = pd.read_csv('config.csv')
+pinNum = int(df_config["fan_pin"].iloc[0])
+
 GPIO.setup(pinNum,GPIO.OUT)
 
 

@@ -14,17 +14,24 @@ if __name__ == "__main__":
 
     """
     This script reads a DHT22 and controls a heating element to control temperature
-    Example, to set to 28 C:
-    python3 scriptName.py 28
+    The first argument is a floating point number, the target temperature
+    The second argument is a float, the fan duty cycle
+    Example, to set to 28 C, 50% fan power
+    python3 scriptName.py 28 0.5
     """
 
 
     tempSetPoint = int(sys.argv[1])
+    #fanDC = int(sys.argv[1])
 
 
     # Set pins
-    heater_pin = 27
-    fan_pin = 17
+    df_config = pd.read_csv('config.csv')
+    fan_pin = int(df_config["fan_pin"].iloc[0])
+    heater_pin = int(df_config["heater_pin"].iloc[0])
+    humidifier_pin = int(df_config["humidifier_pin"].iloc[0])
+    light_pin = int(df_config["light_pin"].iloc[0])
+    DHT22_pin = int(df_config["DHT22_pin"].iloc[0])
 
 
     # find information on box config
@@ -53,7 +60,7 @@ if __name__ == "__main__":
     k2 = 7.14
 
     pi = pigpio.pi()
-    s = DHT22.sensor(pi, 24)
+    s = DHT22.sensor(pi, DHT22_pin)
     r = 0
     next_reading = time.time()
 
@@ -63,9 +70,10 @@ if __name__ == "__main__":
 
     #initialize fan and heater off
     pi.write(fan_pin, 0)
+    pi.write(fan_pin, 1)
     pi.write(heater_pin, 0)
     HeaterStatus = "OFF"
-    FanStatus =  "OFF"
+    FanStatus =  "ON"
     tempPrev = 25
 
     try:

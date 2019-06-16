@@ -5,7 +5,7 @@ import time
 # Write a csv file containing tank names, sensors, etc
 
 #Edit below dictionary with values to reflect configuration of your equipment
-BoxConfig = {'BoxName': ["Box_1"],
+BoxConfig = {'BoxName': ["v2"],
                 'Status':["In Development"],
                 'TempSetPoint': [25],
                 'TempLogInterval_sec': [3],
@@ -13,11 +13,11 @@ BoxConfig = {'BoxName': ["Box_1"],
                 "Photoperiod (h)":["TBD"],
                 'LightsOnTime': ["TBD"],
                 'LightsOffTime': ["TBD"],
-                'heater_pin': [4],
-                'fan_pin': [17],
-                 'light_pin': ["TBD"],
-                 'humidifier_pin': ["TBD"],
-                    'DHT22_pin': ["TBD"]
+                'heater_pin': [17],
+                'fan_pin': [27],
+                 'light_pin': [23],
+                 'humidifier_pin': [22],
+                    'DHT22_pin': [24]
              }
 # 24 hours display in short term data right now
 
