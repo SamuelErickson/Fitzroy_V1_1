@@ -115,6 +115,8 @@ def initializeIO(parameters,vals):
     temp = s.temperature()
     humidity = s.humidity()
 
+    print("temp is "+str(temp)+" and humidity is "+str(humidity))
+
     # initialize humidifier binary power output
     pi.set_mode(parameters['humidifier_pin'], pigpio.OUTPUT)
 
