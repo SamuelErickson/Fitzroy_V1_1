@@ -171,6 +171,8 @@ if __name__ == "__main__":
 
     #initialize
     parameters = retrieve_update_values()
+
+    print("parameters retrieved from file")
     print(retrieve_update_values())
 
     #find number of samples to store in short term memory
@@ -194,6 +196,7 @@ if __name__ == "__main__":
     try:
         # initialize IO pins, sensor
         # query DHT sensor
+        print("initialization loop running")
 
         if not runningOnPC:
             pi, s, vals = initializeIO(parameters, vals)
@@ -204,13 +207,19 @@ if __name__ == "__main__":
         # get seconds since start of epoch
         next_reading = time.time()
 
+        print("while loop starting")
+
         while True:
             # get time
             timeCurrent = datetime.datetime.now()
             timeStamp = timeCurrent.isoformat()
 
             #query sensor
-            temp, humidity = query_DHT_fakedata(temp_prev,humidity_prev)
+
+            if not runningOnPC:
+                temp, humidity = query_DHT(s)
+            else:
+                temp, humidity = query_DHT_fakedata(temp_prev, humidity_prev)
 
             #update vals dict
             vals = {"Time": timeStamp,
