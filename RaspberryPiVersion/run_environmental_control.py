@@ -24,7 +24,7 @@ Arguments:
 import time
 import datetime
 import pigpio
-from RaspberryPiVersion import DHT22
+import DHT22
 import pandas as pd
 from math import floor
 import sys
