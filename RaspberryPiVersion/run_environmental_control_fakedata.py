@@ -148,7 +148,7 @@ def updateIO(pi,vals):
 if __name__ == "__main__":
 
     # set following to True to use fake data and no IO connection
-    runningOnPC = False
+    runningOnPC = True
 
     #initialize
     parameters = retrieve_update_values()
@@ -177,23 +177,23 @@ if __name__ == "__main__":
             "FanPower": "not_connected",
             "LightPower": "not_connected"
             }
-
+    
     try:
         # query DHT sensor
         temp_prev, humidity_prev = query_DHT_fakedata()
-
+    
         # get seconds since start of epoch
         next_reading = time.time()
-
-
+    
+    
         while True:
             # get time
             timeCurrent = datetime.datetime.now()
             timeStamp = timeCurrent.isoformat()
-
+    
             #query sensor
             temp, humidity = query_DHT_fakedata(temp_prev,humidity_prev)
-
+    
             #update vals dict
             vals = {"Time": timeStamp,
                     "TemperatureC": temp,
@@ -204,9 +204,9 @@ if __name__ == "__main__":
                     "LightPower": "not_connected"
                     }
             print(vals)
-
+    
             #record values in short term memory
-
+    
             #if short term data not full
             if (numSamples < maxSamples):
                 df_s = df_s.append(vals, ignore_index=True)
@@ -216,14 +216,14 @@ if __name__ == "__main__":
                 df_s = df_s.iloc[1:]
                 df_s = df_s.append(vals, ignore_index=True)
                 df_s.to_csv('data_shortTerm.csv', index=False)
-
+    
             # record values in long term memory
             # COME BACK TO THIS STEP
-
+    
 
 
             # make control adjustments
-
+            
 
             temp_error = temp-parameters["tempSetPoint"]
             dT = temp - temp_prev
@@ -248,7 +248,7 @@ if __name__ == "__main__":
             if sleepTime > 0:
                 time.sleep(sleepTime)
     finally:
-        print("stopping loop")
+        print("stopping loop")   
         if runningOnPC == False:
             #in case of error or kill process
             pi.write(parameters["fan_pin"], 0)

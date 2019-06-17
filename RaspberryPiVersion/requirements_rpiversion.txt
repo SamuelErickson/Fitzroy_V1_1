@@ -1,0 +1,5 @@
+python3-pandas
+python-dateutil
+python3-numpy
+python3-flask
+python3-pigpio

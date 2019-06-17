@@ -15,26 +15,37 @@ import numpy as np
 import time
 
 #Edit below dictionary with values to reflect configuration of your equipment
-box_config = {'BoxName': "v2_prototype",
-                'Status':"In Development",
-                'TempSetPoint': 25,
-                'TempLogInterval_sec': 3,
-                'TempDisplayWindow_sec': 60*60*24,
-                "Photoperiod (h)":"TBD",
-                'LightsOnTime': "TBD",
-                'LightsOffTime': "TBD",
-                'heater_pin': 17,
-                'fan_pin': 27,
-                 'light_pin': 23,
-                 'humidifier_pin': 22,
-                    'DHT22_pin': 24
-              }
 
-box_settings = {'TempSetPoint': 25,
-                'TempLogInterval_sec': 3,
-                "Photoperiod (h)":"TBD",
-                'LightsOnTime': "TBD",
-                'LightsOffTime': "TBD",
+box = "v1"
+if box =="v1":
+    box_config = {'BoxName': ["v1_prototype"],
+                    'Status':["In Development"],
+                    'heater_pin': [27],
+                    'fan_pin': [17],
+                     'light_pin': [23],
+                     'humidifier_pin': [25],
+                    'DHT22_pin': [24]
+                  }
+else:
+    box_config = {'BoxName': ["v2_prototype"],
+                    'Status':["In Development"],
+                    'heater_pin': [17],
+                    'fan_pin': [27],
+                     'light_pin': [23],
+                     'humidifier_pin': [22],
+                    'DHT22_pin': [24]
+                  }
+
+box_settings = {'TempSetPoint': [25],
+                'HumiditySetPoint':[80],
+                'TempLogInterval_sec': [3],
+                'TempDisplayWindow_sec': [60 * 60 * 24],
+                'LightsOnTime': ["TBD"],
+                'LightsOffTime': ["TBD"],
+                "Photoperiod (h)":["TBD"],
+                "heater_pid_kp":[0.5],
+                "heater_pid_kd": 0,
+                "heater_pid_ki": 0
               }
 
 #save
@@ -44,8 +55,9 @@ df_boxconfig.to_csv("config.csv", index=False)
 df_boxsettings = pd.DataFrame(data=box_settings)
 df_boxsettings.to_csv("settings.csv", index=False)
 
-df_data_shortterm = pd.DataFrame(columns=["Time", "TemperatureC", "Humidity", "HeaterStatus", "HumidifierStatus", "FanStatus"])
+df_data_shortterm = pd.DataFrame(columns=["Time", "TemperatureC","TempSetPoint", "Humidity", "HeaterPower", "HumidifierPower", "LightPower"])
 df_data_shortterm.to_csv("data_shortterm.csv", index=False)
 
-df_data = pd.DataFrame(columns=["Time", "TemperatureC", "Humidity", "HeaterStatus", "HumidifierStatus", "FanStatus"])
+df_data = pd.DataFrame(columns=["Time", "TemperatureC", "Humidity", "HeaterPower", "HumidifierPower", "LightPower"])
 df_data.to_csv("data.csv", index=False)
+

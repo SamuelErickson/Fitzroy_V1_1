@@ -1,7 +1,0 @@
-pandas
-time
-datetime
-pigpio
-
-
-
