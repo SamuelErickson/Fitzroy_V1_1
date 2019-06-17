@@ -110,11 +110,10 @@ def initializeIO(parameters,vals):
     # initialize DHT sensor object
     s = DHT22.sensor(pi, parameters["DHT22_pin"])
 
-    #read DHT22
+    #test DHT22
     s.trigger()
     temp = s.temperature()
     humidity = s.humidity()
-
     print("temp is "+str(temp)+" and humidity is "+str(humidity))
 
     # initialize humidifier binary power output
@@ -162,7 +161,7 @@ def query_DHT_fakedata(temp_previous = 20, hum_previous=80):
 
 def updateIO(pi,vals):
     pulseWidth = vals["HeaterPower"]*255
-    pi.set_PWM_dutycycle(vals["HeaterPin"], pulseWidth)
+    pi.set_PWM_dutycycle(vals["heater_pin"], pulseWidth)
     #TO DO: Add humidifier here, perhaps fan
 
 #The main loop
@@ -202,7 +201,8 @@ if __name__ == "__main__":
 
         if not runningOnPC:
             pi, s, vals = initializeIO(parameters, vals)
-            temp_prev, humidity_prev = vals["TemperatureC"],vals["Humidity"]
+            s.trigger
+            temp_prev, humidity_prev = s.temperature,s.humidity
         else:
             temp_prev, humidity_prev = query_DHT_fakedata()
 
