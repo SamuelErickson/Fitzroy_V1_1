@@ -202,8 +202,8 @@ if __name__ == "__main__":
         if not runningOnPC:
             pi, s, vals = initializeIO(parameters, vals)
             s.trigger()
-            temp_prev = s.temperature
-            humidity_prev = s.humidity
+            temp_prev = s.temperature()
+            humidity_prev = s.humidity()
         else:
             temp_prev, humidity_prev = query_DHT_fakedata()
 
