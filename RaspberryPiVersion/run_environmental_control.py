@@ -202,7 +202,8 @@ if __name__ == "__main__":
         if not runningOnPC:
             pi, s, vals = initializeIO(parameters, vals)
             s.trigger
-            temp_prev, humidity_prev = s.temperature,s.humidity
+            temp_prev = s.temperature
+            humidity_prev = s.humidity
         else:
             temp_prev, humidity_prev = query_DHT_fakedata()
 
@@ -255,6 +256,8 @@ if __name__ == "__main__":
 
 
             temp_error = temp-parameters["tempSetPoint"]
+            print(temp)
+            print(temp_prev)
             dT = temp - temp_prev
             slope = dT/(parameters['TempLogInterval_sec']/60) # in degC / minute
             print(dT)
