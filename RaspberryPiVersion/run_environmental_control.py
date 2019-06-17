@@ -116,10 +116,10 @@ def initializeIO(parameters,vals):
     humidity = s.humidity()
 
     # initialize humidifier binary power output
-    pi.set_mode(parameters['fan_pin'], pigpio.OUTPUT)
+    pi.set_mode(parameters['humidifier_pin'], pigpio.OUTPUT)
 
-    pi.set_PWM_frequency(parameters['heater_pin'], parameters["humidifier_pwm_freq_hz"])
-    pi.set_PWM_frequency(parameters['humidifier_pin'], parameters["heater_pwm_freq_hz"])
+    pi.set_PWM_frequency(parameters['heater_pin'], parameters["heater_pwm_freq_hz"])
+    pi.set_PWM_frequency(parameters['fan_pin'], parameters["fan_pwm_freq_hz"])
     pi.set_PWM_frequency(parameters['light_pin'], parameters["light_pwm_freq_hz"])
 
     # initialize fan, heater, light, humidifier off
