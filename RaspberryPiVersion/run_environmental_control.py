@@ -201,7 +201,7 @@ if __name__ == "__main__":
 
         if not runningOnPC:
             pi, s, vals = initializeIO(parameters, vals)
-            s.trigger
+            s.trigger()
             temp_prev = s.temperature
             humidity_prev = s.humidity
         else:
