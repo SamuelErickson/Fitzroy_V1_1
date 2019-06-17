@@ -148,7 +148,7 @@ def query_DHT(s):
     s.trigger()
     temp = s.temperature()
     humidity = s.humidity()
-    return (temp, humidity)
+    return temp, humidity
 
 
 def query_DHT_fakedata(temp_previous = 20, hum_previous=80):
