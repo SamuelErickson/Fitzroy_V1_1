@@ -108,7 +108,7 @@ def initializeIO(parameters,vals):
     pi = pigpio.pi()
 
     # initialize DHT sensor object
-    s = DHT22.sensor(pi, DHT22_pin)
+    s = DHT22.sensor(pi, parameters["DHT22_pin"])
 
     #read DHT22
     s.trigger()
@@ -116,7 +116,7 @@ def initializeIO(parameters,vals):
     humidity = s.humidity()
 
     # initialize humidifier binary power output
-    pi.set_mode(fan_pin, pigpio.OUTPUT)
+    pi.set_mode(['fan_pin'], pigpio.OUTPUT)
 
     pi.set_PWM_frequency(parameters['heater_pin'], parameters["humidifier_pwm_freq_hz"])
     pi.set_PWM_frequency(parameters['humidifier_pin'], parameters["heater_pwm_freq_hz"])
