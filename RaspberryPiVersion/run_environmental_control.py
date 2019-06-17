@@ -159,9 +159,9 @@ def query_DHT_fakedata(temp_previous = 20, hum_previous=80):
     humidity = hum_previous + random.random()*1 - random.random()*1
     return (temperature,humidity)
 
-def updateIO(pi,vals):
+def updateIO(pi,parameters,vals):
     pulseWidth = vals["HeaterPower"]*255
-    pi.set_PWM_dutycycle(vals["heater_pin"], pulseWidth)
+    pi.set_PWM_dutycycle(parameters["heater_pin"], pulseWidth)
     #TO DO: Add humidifier here, perhaps fan
 
 #The main loop
@@ -275,7 +275,7 @@ if __name__ == "__main__":
 
             #update duty cycle
             if not runningOnPC:
-                updateIO(pi,vals)
+                updateIO(pi,parameters,vals)
 
             #the query sensor step takes a varying amount of time. Find how much time needed to wait before next sensor query.
             next_reading += parameters['TempLogInterval_sec']
