@@ -101,7 +101,7 @@ def retrieve_update_values():
     return(parameters)
 
 
-def initializeIO(parameters):
+def initializeIO(parameters,vals):
     """
     initializes and returns new pigpio pi object for controlling pins
     """
@@ -109,6 +109,11 @@ def initializeIO(parameters):
 
     # initialize DHT sensor object
     s = DHT22.sensor(pi, DHT22_pin)
+
+    #read DHT22
+    s.trigger()
+    temp = s.temperature()
+    humidity = s.humidity()
 
     # initialize humidifier binary power output
     pi.set_mode(fan_pin, pigpio.OUTPUT)
@@ -122,14 +127,28 @@ def initializeIO(parameters):
     pi.write(parameters['humidifier_pin'], 0)
     pi.write(parameters['light_pin'], 0)
     pi.write(parameters['heater_pin'], 0)
-    return pi, s
 
-def query_DHT(parameters,pi):
+    vals = {"Time": None,
+            "TemperatureC": 0,
+            "Humidity": 0,
+            "HeaterPower": 0,
+            "HumidifierPower": 0,
+            "FanPower": 0,
+            "LightPower": 0
+            }
+
+    return pi, s, vals
+
+def query_DHT(s):
     """
-    Pass dictionary of parameters and pigpio pi object as arguments
+    Pass sensor object
     returns temperature, humidity
     """
-    return None
+    s.trigger()
+    temp = s.temperature()
+    humidity = s.humidity()
+    return (temp, humidity)
+
 
 def query_DHT_fakedata(temp_previous = 20, hum_previous=80):
     """
@@ -162,12 +181,6 @@ if __name__ == "__main__":
     #number of rows of data already stored in short term storage
     numSamples = df_s.shape[0]
 
-    # get seconds since start of epoch
-
-    #initialize IO pins, sensor
-    if runningOnPC == False:
-        pi, s = initializeIO(parameters)
-
     #initialize vals dictionary
     vals = {"Time": None,
             "TemperatureC": "not_connected",
@@ -179,12 +192,17 @@ if __name__ == "__main__":
             }
 
     try:
+        # initialize IO pins, sensor
         # query DHT sensor
-        temp_prev, humidity_prev = query_DHT_fakedata()
+
+        if not runningOnPC:
+            pi, s, vals = initializeIO(parameters, vals)
+            temp_prev, humidity_prev = vals["TemperatureC"],vals["Humidity"]
+        else:
+            temp_prev, humidity_prev = query_DHT_fakedata()
 
         # get seconds since start of epoch
         next_reading = time.time()
-
 
         while True:
             # get time
