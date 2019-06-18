@@ -112,6 +112,7 @@ def initializeIO(parameters,vals):
 
     #test DHT22
     s.trigger()
+    time.sleep(1)
     temp = s.temperature()
     humidity = s.humidity()
     print("temp is "+str(temp)+" and humidity is "+str(humidity))
@@ -146,6 +147,7 @@ def query_DHT(s):
     returns temperature, humidity
     """
     s.trigger()
+    time.sleep(1)
     temp = s.temperature()
     humidity = s.humidity()
     return temp, humidity
