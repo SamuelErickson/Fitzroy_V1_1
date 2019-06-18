@@ -229,6 +229,8 @@ if __name__ == "__main__":
             # get time
             timeCurrent = datetime.datetime.now()
             timeStamp = timeCurrent.isoformat()
+            vals["Time"] = timeStamp
+
 
             #query sensor
 
@@ -237,36 +239,8 @@ if __name__ == "__main__":
             else:
                 temp, humidity = query_DHT_fakedata(temp_prev, humidity_prev)
 
-            #update vals dict
-            vals = {"Time": timeStamp,
-                    "TemperatureC": temp,
-                    "Humidity": humidity,
-                    "HeaterPower": "not_connected",
-                    "HumidifierPower": "not_connected",
-                    "FanPower": "not_connected",
-                    "LightPower": "not_connected"
-                    }
-            print(vals)
-
-            #record values in short term memory
-
-            #if short term data not full
-            if (numSamples < maxSamples):
-                df_s = df_s.append(vals, ignore_index=True)
-                df_s.to_csv('data_shortTerm.csv', index=False)
-                numSamples = numSamples + 1
-            else:  # if short term data full
-                df_s = df_s.iloc[1:]
-                df_s = df_s.append(vals, ignore_index=True)
-                df_s.to_csv('data_shortTerm.csv', index=False)
-
-            # record values in long term memory
-            # COME BACK TO THIS STEP
-
-
 
             # make control adjustments
-
 
             temp_error = temp-parameters["tempSetPoint"]
             print(temp)
@@ -280,8 +254,32 @@ if __name__ == "__main__":
                 heater_DC = -1*(temp_error*parameters["heater_pid_kp"]+slope*parameters["heater_pid_kd"])
                 if heater_DC > 1:
                     heater_DC = 1
-            vals["HeaterPower"] = heater_DC
             tempPrev = temp
+
+            # update vals dict
+            vals["TemperatureC"] = temp
+            vals["Humidity"] = humidity
+            vals["HeaterPower"] = heater_DC
+            vals["HumidifierPower"] = "not_connected"
+            vals["FanPower"] = "not_connected",
+            vals["LightPower"] = "not_connected"
+
+            print(vals)
+
+            # record values in short term memory
+
+            # if short term data not full
+            if (numSamples < maxSamples):
+                df_s = df_s.append(vals, ignore_index=True)
+                df_s.to_csv('data_shortTerm.csv', index=False)
+                numSamples = numSamples + 1
+            else:  # if short term data full
+                df_s = df_s.iloc[1:]
+                df_s = df_s.append(vals, ignore_index=True)
+                df_s.to_csv('data_shortTerm.csv', index=False)
+
+            # record values in long term memory
+            # COME BACK TO THIS STEP
 
             #update duty cycle
             if not runningOnPC:
