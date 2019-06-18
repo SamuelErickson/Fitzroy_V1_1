@@ -260,9 +260,6 @@ if __name__ == "__main__":
             vals["TemperatureC"] = temp
             vals["Humidity"] = humidity
             vals["HeaterPower"] = heater_DC
-            vals["HumidifierPower"] = "not_connected"
-            vals["FanPower"] = "not_connected",
-            vals["LightPower"] = "not_connected"
 
             print(vals)
 
