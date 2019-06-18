@@ -132,7 +132,7 @@ def initializeIO(parameters,vals):
     pi.set_PWM_frequency(parameters['light_pin'], parameters["light_pwm_freq_hz"])
 
     # initialize fan, heater, light, humidifier off
-    pi.write(parameters['fan_pin'], 0.5)
+    pi.write(parameters['fan_pin'], int(255*0.5))
     pi.write(parameters['humidifier_pin'], 0)
     pi.write(parameters['light_pin'], 0)
     pi.write(parameters['heater_pin'], 0)
