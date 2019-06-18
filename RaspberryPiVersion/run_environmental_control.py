@@ -30,6 +30,13 @@ from math import floor
 import sys
 import log_activity as la
 import random
+import os
+
+def initiate_pigpio():
+    """
+    Passes a command to linux operating system to start the pigpio daemon
+    """
+    os.system("sudo pigpiod")
 
 
 def retrieve_update_values():
@@ -112,7 +119,7 @@ def initializeIO(parameters,vals):
 
     #test DHT22
     s.trigger()
-    time.sleep(1)
+    time.sleep(5)
     temp = s.temperature()
     humidity = s.humidity()
     print("temp is "+str(temp)+" and humidity is "+str(humidity))
@@ -202,6 +209,7 @@ if __name__ == "__main__":
         print("initialization loop running")
 
         if not runningOnPC:
+            initiate_pigpio()
             pi, s, vals = initializeIO(parameters, vals)
             temp, humidity = query_DHT(s)
             temp_prev = temp
