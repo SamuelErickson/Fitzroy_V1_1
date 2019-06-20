@@ -39,7 +39,15 @@ def initiate_pigpio():
     os.system("sudo pigpiod")
 
 def initiate_light():
-    os.system("screen -d -m -S light_screen bash -c \"python3 test.py\"")
+    """
+    Opens a new linux screen, starts the sunrisesunset_24h.py script, and detaches.
+    """
+    os.system("screen -d -m -S light_screen bash -c \"python3 sunrisesunset_24h.py 8 30 13 35\"")
+
+def turnoff_light():
+    """turns off light"""
+    os.system("screen kill light_screen")
+
 
 def retrieve_update_values():
     """ Code that runs once upon startup. Pulls information on
@@ -131,13 +139,13 @@ def initializeIO(parameters,vals):
 
     pi.set_PWM_frequency(parameters['heater_pin'], parameters["heater_pwm_freq_hz"])
     pi.set_PWM_frequency(parameters['fan_pin'], parameters["fan_pwm_freq_hz"])
-    pi.set_PWM_frequency(parameters['light_pin'], parameters["light_pwm_freq_hz"])
+    #pi.set_PWM_frequency(parameters['light_pin'], parameters["light_pwm_freq_hz"])
 
     # initialize fan at 50%
     # # heater, light, humidifier off
     pi.set_PWM_dutycycle(parameters['fan_pin'], int(255*0.5))
     #pi.set_PWM_frequency(parameters['humidifier_pin'], 0)
-    pi.set_PWM_dutycycle(parameters['light_pin'], 0)
+    #pi.set_PWM_dutycycle(parameters['light_pin'], 0)
     pi.set_PWM_dutycycle(parameters['heater_pin'], 0)
 
     vals = {"Time": None,
@@ -298,7 +306,8 @@ if __name__ == "__main__":
             #in case of error or kill process
             pi.set_PWM_dutycycle(parameters["fan_pin"], 0)
             pi.set_PWM_dutycycle(parameters["heater_pin"], 0)
-            pi.set_PWM_dutycycle(parameters["light_pin"], 0)
+            #pi.set_PWM_dutycycle(parameters["light_pin"], 0)
             #pi.write(parameters["humidifier_pin"], 0)
             s.cancel()
             pi.stop()
+            turnoff_light()
