@@ -51,7 +51,7 @@ pi.write(pinNum,0)
 n = 256
 try:
     while True:        #Sunrise loop
-        for i in np.linspace(0,int(max_duty_cycle)*255,int(max_duty_cycle)*255+1):
+        for i in np.linspace(0,int(max_duty_cycle*255),int(max_duty_cycle*255)+1):
             i = (i/n/2)*piConstant
             i = int(n*sin(i))
             pi.set_PWM_dutycycle(pinNum, i)  # PWM off
@@ -60,7 +60,7 @@ try:
             sleep(checktime_period)
             timeNow = datetime.datetime.now().time()
             isDayTime = (timeNow > timeOn and timeNow<timeOff)
-        for i in np.linspace(int(max_duty_cycle)*255,0,int(max_duty_cycle)*255+1): #sunset loop
+        for i in np.linspace(int(max_duty_cycle*255),0,int(max_duty_cycle*255)+1): #sunset loop
             i = (i/n) * piConstant/2
             i = int(n * sin(i))
             pi.set_PWM_dutycycle(pinNum, i)  # PWM off
