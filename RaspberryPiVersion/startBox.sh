@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 # If this is the first time running this script, you first need to make it executable by user.
+# Enter the following command in the linux shell
+# chmod u+x startBox.sh
 
 # This shell script runs the commands needed to start one Fitzroy system unit box
 
@@ -11,5 +13,5 @@ sudo pigpiod
 #    The above command starts a Fitzroy box at 28 C, 80% relative humidity, 50% fan power, with sunrise at 8:30 AM,
 #    and a sunset 12 hours 00 minutes later at 20:30.
 
-screen -d -m -S environmental_control bash -c "python3 run_environmental_control.py 28 80 0.5 14 50 1 45"
+screen -d -m -S environmental_control bash -c "python3 run_environmental_control.py 28 80 0.5 14 51 1 44"
 
