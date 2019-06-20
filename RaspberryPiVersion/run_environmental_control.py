@@ -46,7 +46,7 @@ def initiate_light(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8):
     """
     Opens a new linux screen, starts the sunrisesunset_24h.py script, and detaches.
     """
-    argument = str(arg1)+" "+str(arg2)+" "+str(arg3)+" "+str(arg4)+" "+str(arg5)+" "+str(arg6)+" "+str(arg7)+" "+str(arg8)+" "+str(arg9)
+    argument = str(arg1)+" "+str(arg2)+" "+str(arg3)+" "+str(arg4)+" "+str(arg5)+" "+str(arg6)+" "+str(arg7)+" "+str(arg8)
     os.system("screen -d -m -S light_screen bash -c \"python3 sunrisesunset_24h.py "+argument+"\"")
 
 def turnoff_light():
