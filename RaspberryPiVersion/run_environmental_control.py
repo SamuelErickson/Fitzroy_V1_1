@@ -38,11 +38,16 @@ def initiate_pigpio():
     """
     os.system("sudo pigpiod")
 
-def initiate_light():
+max_light_power = 0.25
+sunrise_duration = 10
+
+
+def initiate_light(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9):
     """
     Opens a new linux screen, starts the sunrisesunset_24h.py script, and detaches.
     """
-    os.system("screen -d -m -S light_screen bash -c \"python3 sunrisesunset_24h.py 8 30 13 35\"")
+    argument = str(arg1)+" "+str(arg2)+" "+str(arg3)+" "+str(arg4)+" "+str(arg5)+" "+str(arg6)+" "+str(arg7)+" "+str(arg8)+" "+str(arg9)
+    os.system("screen -d -m -S light_screen bash -c \"python3 sunrisesunset_24h.py "+argument+"\"")
 
 def turnoff_light():
     """turns off light"""
@@ -196,7 +201,16 @@ if __name__ == "__main__":
     print("parameters retrieved from file")
     print(retrieve_update_values())
 
-    initiate_light()
+    initiate_light(
+        parameters["light_pin"],
+        max_light_power,
+        sunrise_duration,
+        parameters["light_pwm_freq_hz"],
+        parameters["sunriseTime"].hour,
+        parameters["sunriseTime"].minute,
+        parameters["sunsetTime"].hour,
+        parameters["sunsetTime"].minute
+    )
 
     #find number of samples to store in short term memory
     maxSamples = floor(parameters["TempDisplayWindow_sec"]/parameters['TempLogInterval_sec'])
