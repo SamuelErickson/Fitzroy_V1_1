@@ -6,21 +6,23 @@ import sys
 import datetime
 
 """
-Three optional arguments can be passed to this script in the command line
-1: hour on
-2: minute on
-3: hour off
-4: minute off
+EIght positional arguments must be passed to this script in the command line
+in the correct order
+
+integer light pin
+max light duty cycle, float 0-1
+integer sunrise/sunset duration in seconds
+integer oscillation frequency in hz
+integer hour on
+integer minute on
+integer hour off
+integer minute off
+
 Example:
 python3 sunrisesunset_24h.py 23 0.75 10 500 8 30 20 45
 means drive light with raspberry pi pin 23, maximum duty cycle 0.75, sunrise/sunset duration 10 seconds,
  oscillation frequency 500 hz, on at 8:30 AM, off at 8:45 PM
 """
-
-#
-#sunriseDuration = 10
-#freq = 500
-#max_duty_cycle = 0.5
 
 checktime_period = 10 #period in seconds between checking time to see whether to proceed
 
@@ -39,7 +41,7 @@ timeOn = datetime.time(hourOn, minOn)
 timeOff = datetime.time(hourOff, minOff)
 isDayTime = (timeNow > timeOn and timeNow<timeOff)
 
-incrementTime = sunriseDuration/256
+incrementTime = sunriseDuration/(int(max_duty_cycle*255)+1)
 
 
 
