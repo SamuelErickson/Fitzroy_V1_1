@@ -50,7 +50,12 @@ pi.write(pinNum,0)
 
 n = 256
 try:
+    isDayTime = (timeNow > timeOn and timeNow < timeOff)
     while True:        #Sunrise loop
+        while not isDayTime: #nighttime loop
+            sleep(checktime_period)
+            timeNow = datetime.datetime.now().time()
+            isDayTime = (timeNow > timeOn and timeNow<timeOff)
         for i in np.linspace(0,int(max_duty_cycle*255),int(max_duty_cycle*255)+1):
             i = (i/n/2)*piConstant
             i = int(n*sin(i))
