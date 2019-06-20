@@ -48,7 +48,7 @@ try:
             pi.set_PWM_dutycycle(pinNum, i)  # PWM off
             sleep(incrementTime)
         while isDayTime:
-            sleep(5000)
+            sleep(15)
             timeNow = datetime.datetime.now().time()
             isDayTime = (timeNow > timeOn and timeNow<timeOff)
         for i in np.linspace(255,0,256):
