@@ -38,6 +38,8 @@ def initiate_pigpio():
     """
     os.system("sudo pigpiod")
 
+def initiate_light():
+    os.system("screen -d -m -S light_screen bash -c \"python3 test.py\"")
 
 def retrieve_update_values():
     """ Code that runs once upon startup. Pulls information on
