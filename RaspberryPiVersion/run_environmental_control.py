@@ -42,7 +42,7 @@ max_light_power = 0.25
 sunrise_duration = 10
 
 
-def initiate_light(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9):
+def initiate_light(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8):
     """
     Opens a new linux screen, starts the sunrisesunset_24h.py script, and detaches.
     """
