@@ -1,7 +1,5 @@
-import pandas as pd
-import os
+import time
 
-#df = pd.read_csv("/config.csv")
-
-dir_path = os.path.dirname(os.path.realpath(__file__))
-print(dir_path)
+while True:
+    time.wait(1)
+    print("testing")
