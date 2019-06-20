@@ -125,17 +125,18 @@ def initializeIO(parameters,vals):
     print("temp is "+str(temp)+" and humidity is "+str(humidity))
 
     # initialize humidifier binary power output
-    pi.set_mode(parameters['humidifier_pin'], pigpio.OUTPUT)
+    #pi.set_mode(parameters['humidifier_pin'], pigpio.OUTPUT)
 
     pi.set_PWM_frequency(parameters['heater_pin'], parameters["heater_pwm_freq_hz"])
     pi.set_PWM_frequency(parameters['fan_pin'], parameters["fan_pwm_freq_hz"])
     pi.set_PWM_frequency(parameters['light_pin'], parameters["light_pwm_freq_hz"])
 
-    # initialize fan, heater, light, humidifier off
+    # initialize fan at 50%
+    # # heater, light, humidifier off
     pi.set_PWM_dutycycle(parameters['fan_pin'], int(255*0.5))
-    pi.write(parameters['humidifier_pin'], 0)
-    pi.write(parameters['light_pin'], 0)
-    pi.write(parameters['heater_pin'], 0)
+    #pi.set_PWM_frequency(parameters['humidifier_pin'], 0)
+    pi.set_PWM_dutycycle(parameters['light_pin'], 0)
+    pi.set_PWM_dutycycle(parameters['heater_pin'], 0)
 
     vals = {"Time": None,
             "TemperatureC": 0,
