@@ -25,7 +25,7 @@ means drive light with raspberry pi pin 23, maximum duty cycle 0.75, sunrise/sun
 checktime_period = 10 #period in seconds between checking time to see whether to proceed
 
 pinNum = int(sys.argv[1])
-max_duty_cycle = int(sys.argv[2])
+max_duty_cycle = float(sys.argv[2])
 sunriseDuration = int(sys.argv[3])
 freq = int(sys.argv[4])
 hourOn = int(sys.argv[5])
