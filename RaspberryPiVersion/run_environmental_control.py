@@ -188,6 +188,8 @@ if __name__ == "__main__":
     print("parameters retrieved from file")
     print(retrieve_update_values())
 
+    initiate_light()
+
     #find number of samples to store in short term memory
     maxSamples = floor(parameters["TempDisplayWindow_sec"]/parameters['TempLogInterval_sec'])
 
