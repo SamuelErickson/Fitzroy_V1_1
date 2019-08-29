@@ -1,4 +1,6 @@
 import RPi.GPIO as GPIO
+import pandas as pd
+
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 pinNum = 27
