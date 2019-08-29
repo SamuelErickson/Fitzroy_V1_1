@@ -15,8 +15,10 @@ import numpy as np
 import time
 
 #Edit below dictionary with values to reflect configuration of your equipment
+#Pin numbers correspond to BCM numbers - there is more than one way to number
 
-box = "v1"
+
+box = "v2"
 if box =="v1":
     box_config = {'BoxName': ["v1_prototype"],
                     'Status':["In Development"],
@@ -29,9 +31,9 @@ if box =="v1":
 else:
     box_config = {'BoxName': ["v2_prototype"],
                     'Status':["In Development"],
-                    'heater_pin': [17],
-                    'fan_pin': [27],
-                     'light_pin': [23],
+                    'heater_pin': [27],
+                    'fan_pin': [17],
+                     'light_pin': [10],
                      'humidifier_pin': [22],
                     'DHT22_pin': [24]
                   }
