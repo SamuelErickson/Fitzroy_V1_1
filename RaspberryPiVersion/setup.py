@@ -31,8 +31,8 @@ if box =="v1":
 else:
     box_config = {'BoxName': ["v2_prototype"],
                     'Status':["In Development"],
-                    'heater_pin': [27],
-                    'fan_pin': [17],
+                    'heater_pin': [17],
+                    'fan_pin': [27],
                      'light_pin': [10],
                      'humidifier_pin': [22],
                     'DHT22_pin': [24]
