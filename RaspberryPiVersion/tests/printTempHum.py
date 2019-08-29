@@ -3,7 +3,7 @@ if __name__ == "__main__":
     import datetime
     import pigpio
     import pandas as pd
-    from . import DHT22
+    import DHT22
 
     # Intervals of about 2 seconds or less will eventually hang the DHT22.
     df_config = pd.read_csv('../config.csv')
