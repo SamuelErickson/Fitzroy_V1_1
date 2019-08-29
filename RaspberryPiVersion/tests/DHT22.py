@@ -241,43 +241,42 @@ class sensor:
          self.cb.cancel()
          self.cb = None
 
- if __name__ == "__main__":
+if __name__ == "__main__":
 
-    import time
+   import time
 
-    import pigpio
+   import pigpio
 
-    import DHT22
+   import DHT22
 
-    # Intervals of about 2 seconds or less will eventually hang the DHT22.
-    INTERVAL=3
+   # Intervals of about 2 seconds or less will eventually hang the DHT22.
+   INTERVAL=3
 
-    pi = pigpio.pi()
+   pi = pigpio.pi()
 
-    s = DHT22.sensor(pi, 24)
+   s = DHT22.sensor(pi, 24)
 
-    r = 0
+   r = 0
 
-    next_reading = time.time()
+   next_reading = time.time()
 
-    while True:
+   while True:
 
-       r += 1
+      r += 1
 
-       s.trigger()
+      s.trigger()
 
-       time.sleep(0.2)
+      time.sleep(0.2)
 
-       print("{} {} {} {:3.2f} {} {} {} {}".format(
-          r, s.humidity(), s.temperature(), s.staleness(),
-          s.bad_checksum(), s.short_message(), s.missing_message(),
-          s.sensor_resets()))
+      print("{} {} {} {:3.2f} {} {} {} {}".format(
+         r, s.humidity(), s.temperature(), s.staleness(),
+         s.bad_checksum(), s.short_message(), s.missing_message(),
+         s.sensor_resets()))
 
-       next_reading += INTERVAL
+      next_reading += INTERVAL
 
-       time.sleep(next_reading-time.time()) # Overall INTERVAL second polling.
+      time.sleep(next_reading-time.time()) # Overall INTERVAL second polling.
 
-    s.cancel()
-
-    pi.stop()
+   s.cancel()
+   pi.stop()
 
