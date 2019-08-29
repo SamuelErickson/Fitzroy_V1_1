@@ -13,6 +13,10 @@ Output:
 import pandas as pd
 import numpy as np
 import time
+import os
+
+# initialize the pippio daemon, which operates the input-output pins
+os.system("sudo pigpiod")
 
 #Edit below dictionary with values to reflect configuration of your equipment
 #Pin numbers correspond to BCM numbers - there is more than one way to number
