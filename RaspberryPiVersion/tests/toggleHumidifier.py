@@ -3,7 +3,7 @@ import pandas as pd
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 pinNum = 25
-df_config = pd.read_csv('config.csv')
+df_config = pd.read_csv('../config.csv')
 pinNum = int(df_config["humidifier_pin"].iloc[0])
 GPIO.setup(pinNum,GPIO.OUT)
 

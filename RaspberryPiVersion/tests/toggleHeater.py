@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 pinNum = 27
-df_config = pd.read_csv('config.csv')
+df_config = pd.read_csv('../config.csv')
 pinNum = int(df_config["heater_pin"].iloc[0])
 GPIO.setup(pinNum,GPIO.OUT)
 
