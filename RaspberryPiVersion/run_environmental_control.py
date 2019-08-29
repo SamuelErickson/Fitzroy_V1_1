@@ -148,7 +148,8 @@ def initializeIO(parameters,vals):
 
     # initialize fan at 50%
     # # heater, light, humidifier off
-    pi.set_PWM_dutycycle(parameters['fan_pin'], int(255*0.5))
+    pi.set_PWM_dutycycle(parameters['fan_pin'], int(255* parameters["fanDC"]))
+    #Ben edited this 8-28
     #pi.set_PWM_frequency(parameters['humidifier_pin'], 0)
     #pi.set_PWM_dutycycle(parameters['light_pin'], 0)
     pi.set_PWM_dutycycle(parameters['heater_pin'], 0)
@@ -285,6 +286,12 @@ if __name__ == "__main__":
 
             # update vals dict
             vals["TemperatureC"] = temp
+
+
+            #EDIT suggested by Ben 8/28/2019
+            vals["TempSetPoint"] = parameters["tempSetPoint"]
+
+
             vals["Humidity"] = humidity
             vals["HeaterPower"] = heater_DC
 
@@ -295,12 +302,12 @@ if __name__ == "__main__":
             # if short term data not full
             if (numSamples < maxSamples):
                 df_s = df_s.append(vals, ignore_index=True)
-                df_s.to_csv('data_shortTerm.csv', index=False)
+                df_s.to_csv('data_shortterm.csv', index=False)
                 numSamples = numSamples + 1
             else:  # if short term data full
                 df_s = df_s.iloc[1:]
                 df_s = df_s.append(vals, ignore_index=True)
-                df_s.to_csv('data_shortTerm.csv', index=False)
+                df_s.to_csv('data_shortterm.csv', index=False)
 
             # record values in long term memory
             # COME BACK TO THIS STEP
