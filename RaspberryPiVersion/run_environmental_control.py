@@ -38,10 +38,6 @@ def initiate_pigpio():
     """
     os.system("sudo pigpiod")
 
-max_light_power = 0.25
-sunrise_duration = 10
-
-
 def initiate_light(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8):
     """
     Opens a new linux screen, starts the sunrisesunset_24h.py script, and detaches.
@@ -95,13 +91,15 @@ def retrieve_update_values():
     #data display settings
 
     #five second default sampling period
-    parameters['TempLogInterval_sec'] = 5
+    parameters['LogInterval_sec'] = 5
 
     #24 hours default data display window for desktop interface
-    parameters["TempDisplayWindow_sec"] = 86400
+    parameters["DisplayWindow_sec"] = 86400
 
     #INITIALIZE CONTROL PARAMETERS
     #Pulse width modulation frequencies
+
+    parameters["humidifier_pwm_freq_hz"] = 10 #NEW LINE
     parameters["heater_pwm_freq_hz"] = 10
     parameters["fan_pwm_freq_hz"] = 10
     parameters["light_pwm_freq_hz"] = 500
@@ -112,9 +110,13 @@ def retrieve_update_values():
     parameters["heater_pid_kd"] = 0
     parameters["heater_pid_ki"] = 0
 
+    parameters["humidifier_pid_kp"] = 0.5
+    parameters["humidifier_pid_kd"] = 0
+    parameters["humidifier_pid_ki"] = 0
+
     # Intervals of about 2 seconds or less will eventually hang the DHT22.
-    df_settings['TempLogInterval_sec'] = [parameters['TempLogInterval_sec']]
-    df_settings["TempDisplayWindow_sec"] = [parameters["TempDisplayWindow_sec"]]
+    df_settings['LogInterval_sec'] = [parameters['LogInterval_sec']]
+    df_settings["DisplayWindow_sec"] = [parameters["DisplayWindow_sec"]]
     df_settings['LightsOnTime'] = [parameters["sunriseTime"]]
     df_settings['LightsOffTime'] = [parameters["sunsetTime"]]
     df_settings["Photoperiod (h)"] = parameters["photoperiod_h"]
@@ -146,20 +148,23 @@ def initializeIO(parameters,vals):
     pi.set_PWM_frequency(parameters['fan_pin'], parameters["fan_pwm_freq_hz"])
     #pi.set_PWM_frequency(parameters['light_pin'], parameters["light_pwm_freq_hz"])
 
-    # initialize fan at 50%
-    # # heater, light, humidifier off
+    # start fan at power level specified on starting command
     pi.set_PWM_dutycycle(parameters['fan_pin'], int(255* parameters["fanDC"]))
     #Ben edited this 8-28
-    #pi.set_PWM_frequency(parameters['humidifier_pin'], 0)
+    #pi.set_PWM_frequency(parameters['humidifier_pin'], 0) - not correct talk to Sam about this
     #pi.set_PWM_dutycycle(parameters['light_pin'], 0)
+
+    # heater, humidifier off
     pi.set_PWM_dutycycle(parameters['heater_pin'], 0)
+    pi.set_PWM_dutycycle(parameters['humidifier_pin'], 0)
+
 
     vals = {"Time": None,
-            "TemperatureC": 0,
-            "Humidity": 0,
+            "TemperatureC": None,
+            "Humidity": None,
             "HeaterPower": 0,
             "HumidifierPower": 0,
-            "FanPower": 0.5,
+            "FanPower": parameters["fanDC"], #changed this 8/29/2019 - Sam
             "LightPower": 0
             }
 
@@ -186,9 +191,12 @@ def query_DHT_fakedata(temp_previous = 20, hum_previous=80):
     return (temperature,humidity)
 
 def updateIO(pi,parameters,vals):
-    pulseWidth = vals["HeaterPower"]*255
-    pi.set_PWM_dutycycle(parameters["heater_pin"], pulseWidth)
-    #TO DO: Add humidifier here, perhaps fan
+    heater_pulseWidth = vals["HeaterPower"]*255
+    humidifier_pulseWidth = vals["HumidifierPower"]*255
+
+    pi.set_PWM_dutycycle(parameters["heater_pin"], heater_pulseWidth)
+    pi.set_PWM_dutycycle(parameters["humidifier_pin"], humidifier_pulseWidth)
+
 
 #The main loop
 if __name__ == "__main__":
@@ -202,6 +210,9 @@ if __name__ == "__main__":
     print("parameters retrieved from file")
     print(retrieve_update_values())
 
+    max_light_power = 0.5 #fraction of max light output
+    sunrise_duration = 10 #seconds
+
     initiate_light(
         parameters["light_pin"],
         max_light_power,
@@ -214,7 +225,7 @@ if __name__ == "__main__":
     )
 
     #find number of samples to store in short term memory
-    maxSamples = floor(parameters["TempDisplayWindow_sec"]/parameters['TempLogInterval_sec'])
+    maxSamples = floor(parameters["DisplayWindow_sec"]/parameters['LogInterval_sec'])
 
     #open short term data as a pandas dataframe
     df_s = pd.read_csv('data_shortterm.csv')
@@ -268,32 +279,44 @@ if __name__ == "__main__":
                 temp, humidity = query_DHT_fakedata(temp_prev, humidity_prev)
 
 
-            # make control adjustments
-
+            # make temperature control adjustments
             temp_error = temp-parameters["tempSetPoint"]
             print(temp)
             print(temp_prev)
             dT = temp - temp_prev
-            slope = dT/(parameters['TempLogInterval_sec']/60) # in degC / minute
+            temp_slope = dT/(parameters['LogInterval_sec']/60) # in degC / minute
             print(dT)
             if temp_error > 0:
                 heater_DC = 0
             else:
-                heater_DC = -1*(temp_error*parameters["heater_pid_kp"]+slope*parameters["heater_pid_kd"])
+                heater_DC = -1*(temp_error*parameters["heater_pid_kp"]+temp_slope*parameters["heater_pid_kd"])
                 if heater_DC > 1:
                     heater_DC = 1
             tempPrev = temp
 
             # update vals dict
             vals["TemperatureC"] = temp
-
-
-            #EDIT suggested by Ben 8/28/2019
             vals["TempSetPoint"] = parameters["tempSetPoint"]
 
+            # make humidity control adjustments
+            humidity_error = temp-parameters["humiditySetPoint"]
+            print(humidity)
+            print(humidity_prev)
+            dH = humidity - humidity_prev
+            humidity_slope = dH/(parameters['LogInterval_sec']/60) # in degC / minute
+            print(dT)
+            if humidity_error > 0:
+                humidity_DC = 0
+            else:
+                humidity_DC = -1*(humidity_error*parameters["humidifier_pid_kp"]+humidity_slope*parameters["humidifier_pid_kd"])
+                if humidity_DC > 1:
+                    humidity_DC = 1
+            humidity_prev = humidity
 
+            # update vals dict
             vals["Humidity"] = humidity
-            vals["HeaterPower"] = heater_DC
+            vals["HumidifierPower"] = humidity_DC
+
 
             print(vals)
 
@@ -317,17 +340,20 @@ if __name__ == "__main__":
                 updateIO(pi,parameters,vals)
 
             #the query sensor step takes a varying amount of time. Find how much time needed to wait before next sensor query.
-            next_reading += parameters['TempLogInterval_sec']
+            next_reading += parameters['LogInterval_sec']
             sleepTime = next_reading-time.time()
             if sleepTime > 0:
                 time.sleep(sleepTime)
+
+
+
     finally:
         print("stopping loop")
         if runningOnPC == False:
             #in case of error or kill process
             pi.set_PWM_dutycycle(parameters["fan_pin"], 0)
             pi.set_PWM_dutycycle(parameters["heater_pin"], 0)
-            #pi.set_PWM_dutycycle(parameters["light_pin"], 0)
+            pi.set_PWM_dutycycle(parameters["humidifier_pin"], 0)
             #pi.write(parameters["humidifier_pin"], 0)
             s.cancel()
             pi.stop()
