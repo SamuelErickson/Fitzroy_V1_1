@@ -158,10 +158,10 @@ def initializeIO(parameters,vals):
     pi.set_PWM_dutycycle(parameters['heater_pin'], 0)
     pi.set_PWM_dutycycle(parameters['humidifier_pin'], 0)
 
-
+    # SAM - fix below, instead of defining new dictionary, simply edit existing values
     vals = {"Time": None,
-            "TemperatureC": None,
-            "Humidity": None,
+            "TemperatureC": temp,
+            "Humidity": humidity,
             "HeaterPower": 0,
             "HumidifierPower": 0,
             "FanPower": parameters["fanDC"], #changed this 8/29/2019 - Sam
@@ -196,6 +196,7 @@ def updateIO(pi,parameters,vals):
 
     pi.set_PWM_dutycycle(parameters["heater_pin"], heater_pulseWidth)
     pi.set_PWM_dutycycle(parameters["humidifier_pin"], humidifier_pulseWidth)
+    print("pin power levels updated")
 
 
 #The main loop
@@ -281,11 +282,10 @@ if __name__ == "__main__":
 
             # make temperature control adjustments
             temp_error = temp-parameters["tempSetPoint"]
-            print(temp)
-            print(temp_prev)
+
             dT = temp - temp_prev
             temp_slope = dT/(parameters['LogInterval_sec']/60) # in degC / minute
-            print(dT)
+
             if temp_error > 0:
                 heater_DC = 0
             else:
@@ -294,17 +294,17 @@ if __name__ == "__main__":
                     heater_DC = 1
             tempPrev = temp
 
+
+
             # update vals dict
             vals["TemperatureC"] = temp
-            vals["TempSetPoint"] = parameters["tempSetPoint"]
+            vals["HeaterPower"] = heater_DC
 
             # make humidity control adjustments
-            humidity_error = temp-parameters["humiditySetPoint"]
-            print(humidity)
-            print(humidity_prev)
+            humidity_error = humidity-parameters["humiditySetPoint"]
+
             dH = humidity - humidity_prev
             humidity_slope = dH/(parameters['LogInterval_sec']/60) # in degC / minute
-            print(dT)
             if humidity_error > 0:
                 humidity_DC = 0
             else:
@@ -316,6 +316,11 @@ if __name__ == "__main__":
             # update vals dict
             vals["Humidity"] = humidity
             vals["HumidifierPower"] = humidity_DC
+
+            print("The temp error is:")
+            print(temp_error)
+            print("The humidity error is:")
+            print(humidity_error)
 
 
             print(vals)
