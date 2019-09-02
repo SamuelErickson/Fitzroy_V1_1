@@ -24,7 +24,7 @@ means drive light with raspberry pi pin 18, maximum duty cycle 0.75, sunrise/sun
  oscillation frequency 500 hz, on at 8:30 AM, off at 8:45 PM
 """
 
-checktime_period = 10 #period in seconds between checking time to see whether to proceed
+checktime_period = 3 #period in seconds between checking time to see whether to proceed
 
 pinNum = int(sys.argv[1])
 max_duty_cycle = float(sys.argv[2])
@@ -60,6 +60,7 @@ pi.hardware_PWM(pinNum, freq,250000)#590000)
 sleep(1)
 pi.hardware_PWM(pinNum, freq,0)#590000)
 sleep(1)
+print("entering main loop")
 
 
 n = 1000000
@@ -67,6 +68,7 @@ try:
     isDayTime = (timeNow > timeOn and timeNow < timeOff)
     while True:        #Sunrise loop
         while not isDayTime: #nighttime loop
+            print("1")
             sleep(checktime_period)
             timeNow = datetime.datetime.now().time()
             isDayTime = (timeNow > timeOn and timeNow<timeOff)
@@ -76,18 +78,20 @@ try:
             pi.hardware_PWM(pinNum, freq,i)
             sleep(incrementTime)
         while isDayTime: #daytime loop
+            print("3")
             sleep(checktime_period)
             timeNow = datetime.datetime.now().time()
             isDayTime = (timeNow > timeOn and timeNow<timeOff)
         for i in np.linspace(int(max_duty_cycle*n),0,int(max_duty_cycle*n)+1): #sunset loop
+            print("4")
             i = (i/n) * piConstant/2
             i = int(n * sin(i))
             pi.hardware_PWM(pinNum, freq,i)
             sleep(incrementTime)
-        while not isDayTime: #nighttime loop
-            sleep(checktime_period)
-            timeNow = datetime.datetime.now().time()
-            isDayTime = (timeNow > timeOn and timeNow<timeOff)
+        #while not isDayTime: #nighttime loop
+         #   sleep(checktime_period)
+          #  timeNow = datetime.datetime.now().time()
+           # isDayTime = (timeNow > timeOn and timeNow<timeOff)
 finally: #These lines will execute even if there is an exception error during the sunrise/sunset loops
     # For instance, if the process is killed this should happen
     pi.write(pinNum, 0)
