@@ -49,6 +49,19 @@ pi = pigpio.pi()
 pi.set_mode(pinNum, pigpio.ALT5)
 pi.hardware_PWM(pinNum, freq,0)#590000)
 
+print("testing light")
+pi.hardware_PWM(pinNum, freq,1000000)#590000)
+sleep(1)
+pi.hardware_PWM(pinNum, freq,750000)#590000)
+sleep(1)
+pi.hardware_PWM(pinNum, freq,500000)#590000)
+sleep(1)
+pi.hardware_PWM(pinNum, freq,250000)#590000)
+sleep(1)
+pi.hardware_PWM(pinNum, freq,0)#590000)
+sleep(1)
+
+
 n = 1000000
 try:
     isDayTime = (timeNow > timeOn and timeNow < timeOff)
