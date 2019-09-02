@@ -35,6 +35,8 @@ minOn = int(sys.argv[6])
 hourOff = int(sys.argv[7])
 minOff = int(sys.argv[8])
 
+n = 1000000
+
 
 timeNow = datetime.datetime.now().time()
 timeOn = datetime.time(hourOn, minOn)
@@ -63,7 +65,6 @@ sleep(1)
 print("entering main loop")
 
 
-n = 1000000
 try:
     isDayTime = (timeNow > timeOn and timeNow < timeOff)
     while True:        #Sunrise loop
