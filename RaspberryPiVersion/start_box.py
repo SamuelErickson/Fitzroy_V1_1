@@ -8,4 +8,4 @@ import os
 #    The below command starts a Fitzroy box at 28 C, 80% relative humidity, 50% fan power, with sunrise at 8:30 AM,
 #    and a sunset 12 hours 00 minutes later at 20:30.
 
-os.system("screen -d -m -S environmental_control bash -c \"python3 run_environmental_control.py 25 80 0 15 33 0 2 \"")
+os.system("screen -d -m -S environmental_control bash -c \"python3 run_environmental_control.py 25 80 0 15 35 0 10 \"")
