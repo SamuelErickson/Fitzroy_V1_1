@@ -19,8 +19,8 @@ integer hour off
 integer minute off
 
 Example:
-python3 sunrisesunset_24h.py 18 0.75 10 500 8 30 20 45
-means drive light with raspberry pi pin 18, maximum duty cycle 0.75, sunrise/sunset duration 10 seconds,
+python3 sunrisesunset_24h.py 23 0.75 10 500 8 30 20 45
+means drive light with raspberry pi pin 23, maximum duty cycle 0.75, sunrise/sunset duration 10 seconds,
  oscillation frequency 500 hz, on at 8:30 AM, off at 8:45 PM
 """
 
@@ -46,10 +46,11 @@ incrementTime = sunriseDuration/(int(max_duty_cycle*255)+1)
 
 
 pi = pigpio.pi()
-pi.set_mode(pinNum, pigpio.ALT5)
-pi.hardware_PWM(pinNum, freq,0)#590000)
+pi.set_PWM_frequency(pinNum,freq)
+pi.set_mode(pinNum,pigpio.OUTPUT)
+pi.write(pinNum,0)
 
-n = 1000000
+n = 256
 try:
     isDayTime = (timeNow > timeOn and timeNow < timeOff)
     while True:        #Sunrise loop
@@ -57,19 +58,19 @@ try:
             sleep(checktime_period)
             timeNow = datetime.datetime.now().time()
             isDayTime = (timeNow > timeOn and timeNow<timeOff)
-        for i in np.linspace(0,int(max_duty_cycle*n),int(max_duty_cycle*n)+1):
+        for i in np.linspace(0,int(max_duty_cycle*255),int(max_duty_cycle*255)+1):
             i = (i/n/2)*piConstant
             i = int(n*sin(i))
-            pi.hardware_PWM(pinNum, freq,i)
+            pi.set_PWM_dutycycle(pinNum, i)  # PWM off
             sleep(incrementTime)
         while isDayTime: #daytime loop
             sleep(checktime_period)
             timeNow = datetime.datetime.now().time()
             isDayTime = (timeNow > timeOn and timeNow<timeOff)
-        for i in np.linspace(int(max_duty_cycle*n),0,int(max_duty_cycle*n)+1): #sunset loop
+        for i in np.linspace(int(max_duty_cycle*255),0,int(max_duty_cycle*255)+1): #sunset loop
             i = (i/n) * piConstant/2
             i = int(n * sin(i))
-            pi.hardware_PWM(pinNum, freq,i)
+            pi.set_PWM_dutycycle(pinNum, i)  # PWM off
             sleep(incrementTime)
         while not isDayTime: #nighttime loop
             sleep(checktime_period)
