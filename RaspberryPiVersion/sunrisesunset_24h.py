@@ -43,9 +43,9 @@ timeOn = datetime.time(hourOn, minOn)
 timeOff = datetime.time(hourOff, minOff)
 isDayTime = (timeNow > timeOn and timeNow<timeOff)
 
-incrementTime = sunriseDuration/(int(max_duty_cycle*n)+1)
 
 steps = 100 # number of discrete intensity steps
+incrementTime = sunriseDuration/(int(max_duty_cycle*steps)+1)
 
 
 pi = pigpio.pi()
