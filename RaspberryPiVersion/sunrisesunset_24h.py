@@ -41,7 +41,7 @@ timeOn = datetime.time(hourOn, minOn)
 timeOff = datetime.time(hourOff, minOff)
 isDayTime = (timeNow > timeOn and timeNow<timeOff)
 
-incrementTime = sunriseDuration/(int(max_duty_cycle*255)+1)
+incrementTime = sunriseDuration/(int(max_duty_cycle*n)+1)
 
 
 
