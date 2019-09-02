@@ -45,6 +45,7 @@ isDayTime = (timeNow > timeOn and timeNow<timeOff)
 
 incrementTime = sunriseDuration/(int(max_duty_cycle*n)+1)
 
+steps = 100 # number of discrete intensity steps
 
 
 pi = pigpio.pi()
@@ -73,8 +74,9 @@ try:
             sleep(checktime_period)
             timeNow = datetime.datetime.now().time()
             isDayTime = (timeNow > timeOn and timeNow<timeOff)
-        for i in np.linspace(0,int(max_duty_cycle*n),int(max_duty_cycle*n)+1):
-            i = (i/n/2)*piConstant
+        for i in np.linspace(1,steps,steps):
+            print(i)
+            i = (i/steps/2)*piConstant
             i = int(n*sin(i))
             pi.hardware_PWM(pinNum, freq,i)
             sleep(incrementTime)
