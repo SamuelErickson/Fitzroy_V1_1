@@ -63,7 +63,14 @@ pi.hardware_PWM(pinNum, freq,250000)#590000)
 sleep(1)
 pi.hardware_PWM(pinNum, freq,0)#590000)
 sleep(1)
+for i in np.linspace(1, steps, steps):
+    print(i)
+    i = (i / steps / 2) * piConstant
+    i = int(n * sin(i))
+    pi.hardware_PWM(pinNum, freq, i)
+    sleep(incrementTime)
 print("entering main loop")
+
 
 
 try:
