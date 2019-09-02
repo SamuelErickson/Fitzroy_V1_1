@@ -22,7 +22,7 @@ os.system("sudo pigpiod")
 #Pin numbers correspond to BCM numbers - there is more than one way to number
 
 
-box = "v2"
+box = "v2.2"
 if box =="v1":
     box_config = {'BoxName': ["v1_prototype"],
                     'Status':["In Development"],
@@ -37,7 +37,7 @@ else:
                     'Status':["In Development"],
                     'heater_pin': [17],
                     'fan_pin': [27],
-                     'light_pin': [10],
+                     'light_pin': [18],
                      'humidifier_pin': [22],
                     'DHT22_pin': [24]
                   }
