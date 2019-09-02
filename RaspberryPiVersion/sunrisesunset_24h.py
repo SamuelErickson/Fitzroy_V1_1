@@ -35,8 +35,7 @@ minOn = int(sys.argv[6])
 hourOff = int(sys.argv[7])
 minOff = int(sys.argv[8])
 
-n = 1000000
-
+n = int(1000000*max_duty_cycle)
 
 timeNow = datetime.datetime.now().time()
 timeOn = datetime.time(hourOn, minOn)
@@ -81,7 +80,7 @@ try:
             sleep(checktime_period)
             timeNow = datetime.datetime.now().time()
             isDayTime = (timeNow > timeOn and timeNow<timeOff)
-        for i in np.linspace(1,steps,steps):
+        for i in np.linspace(0,steps,steps+1):
             print(i)
             i = (i/steps/2)*piConstant
             i = int(n*sin(i))
@@ -92,10 +91,10 @@ try:
             sleep(checktime_period)
             timeNow = datetime.datetime.now().time()
             isDayTime = (timeNow > timeOn and timeNow<timeOff)
-        for i in np.linspace(int(max_duty_cycle*n),0,int(max_duty_cycle*n)+1): #sunset loop
-            print("4")
-            i = (i/n) * piConstant/2
-            i = int(n * sin(i))
+        for i in np.linspace(steps,0,steps+1):
+            print(i)
+            i = (i/steps/2)*piConstant
+            i = int(n*sin(i))
             pi.hardware_PWM(pinNum, freq,i)
             sleep(incrementTime)
         #while not isDayTime: #nighttime loop
