@@ -23,10 +23,13 @@ means drive light with raspberry pi pin 18, maximum duty cycle 0.75, sunrise/sun
  oscillation frequency 500 hz, on at 8:30 AM, off at 8:45 PM
 """
 
+checktime_period = 3 #period in seconds between checking time to see whether to proceed
+
 pinNum = int(sys.argv[1])
 max_duty_cycle = float(sys.argv[2])
 sunriseDuration = int(sys.argv[3])
 freq = int(sys.argv[4])
+
 n = int(1000000*max_duty_cycle)
 
 steps = 100 # number of discrete intensity steps
@@ -34,7 +37,7 @@ incrementTime = sunriseDuration/(int(max_duty_cycle*steps)+1)
 
 pi = pigpio.pi()
 pi.set_mode(pinNum, pigpio.ALT5)
-for i in np.linspace(0,steps,steps+1):
+for i in np.linspace(steps,0,steps+1):
     print(i)
     i = (i/steps/2)*piConstant
     i = int(n*sin(i))

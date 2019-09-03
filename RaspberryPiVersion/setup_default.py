@@ -42,16 +42,16 @@ else:
                     'DHT22_pin': [24]
                   }
 
-box_settings = {'TempSetPoint': [25],
-                'HumiditySetPoint':[80],
-                'TempLogInterval_sec': [3],
-                'TempDisplayWindow_sec': [60 * 60 * 24],
+box_settings = {'TempSetPoint': ["TBD"],
+                'HumiditySetPoint':["TBD"],
+                'LogInterval_sec': [5],
+                'DisplayWindow_sec': [86400],
                 'LightsOnTime': ["TBD"],
                 'LightsOffTime': ["TBD"],
                 "Photoperiod (h)":["TBD"],
                 "heater_pid_kp":[0.5],
-                "heater_pid_kd": 0,
-                "heater_pid_ki": 0
+                "heater_pid_kd": [0],
+                "heater_pid_ki": [0]
               }
 
 #save
