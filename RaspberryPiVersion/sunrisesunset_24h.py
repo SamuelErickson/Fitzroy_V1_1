@@ -22,6 +22,8 @@ Example:
 python3 sunrisesunset_24h.py 18 0.75 10 500 8 30 20 45
 means drive light with raspberry pi pin 18, maximum duty cycle 0.75, sunrise/sunset duration 10 seconds,
  oscillation frequency 500 hz, on at 8:30 AM, off at 8:45 PM
+ 
+ WITH CURRENT SETTINGS CAN NOT CONTROL MAX LIGHT OUTPUT ALWAYS 100%
 """
 
 checktime_period = 60 #period in seconds between checking time to see whether to proceed
@@ -43,7 +45,7 @@ timeOff = datetime.time(hourOff, minOff)
 isDayTime = (timeNow > timeOn and timeNow<timeOff)
 
 
-steps = 300 # number of discrete intensity steps
+steps = 360 # number of discrete intensity steps
 incrementTime = sunriseDuration/(int(max_duty_cycle*steps)+1)
 
 
@@ -58,7 +60,7 @@ try:
     isDayTime = (timeNow > timeOn and timeNow < timeOff)
     while True:        #Sunrise loop
         while not isDayTime: #nighttime loop
-            print("1")
+            print("Nighttime")
             sleep(checktime_period)
             timeNow = datetime.datetime.now().time()
             isDayTime = (timeNow > timeOn and timeNow<timeOff)
@@ -68,9 +70,9 @@ try:
             i = int(n*sin(i))
             pi.hardware_PWM(pinNum, freq,i)
             sleep(incrementTime)
-        pi.write(pinNum,1)
+        pi.write(pinNum,1)  #On 100%
         while isDayTime: #daytime loop
-            print("3")
+            print("Daytime")
             sleep(checktime_period)
             timeNow = datetime.datetime.now().time()
             isDayTime = (timeNow > timeOn and timeNow<timeOff)
@@ -80,6 +82,7 @@ try:
             i = int(n*sin(i))
             pi.hardware_PWM(pinNum, freq,i)
             sleep(incrementTime)
+        pi.write(pinNum,0)  #On 100%
         #while not isDayTime: #nighttime loop
          #   sleep(checktime_period)
           #  timeNow = datetime.datetime.now().time()
