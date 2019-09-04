@@ -370,9 +370,9 @@ if __name__ == "__main__":
         print("stopping loop")
         if runningOnPC == False:
             #in case of error or kill process
-            pi.set_PWM_dutycycle(parameters["fan_pin"], 0)
-            pi.set_PWM_dutycycle(parameters["heater_pin"], 0)
-            pi.set_PWM_dutycycle(parameters["humidifier_pin"], 0)
+            pi.write(parameters["fan_pin"], 0)
+            pi.write(parameters["heater_pin"], 0)
+            pi.write(parameters["humidifier_pin"], 0)
             #pi.write(parameters["humidifier_pin"], 0)
             s.cancel()
             pi.stop()
