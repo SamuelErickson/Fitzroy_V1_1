@@ -114,6 +114,10 @@ def retrieve_update_values():
     parameters["humidifier_pid_kd"] = 0
     parameters["humidifier_pid_ki"] = 0
 
+    parameters["fan_pid_kp"] = 0.1
+    parameters["fan_humidifier_pid_kd"] = 0
+    parameters["fan_humidifier_pid_ki"] = 0
+
     # Intervals of about 2 seconds or less will eventually hang the DHT22.
     df_settings['LogInterval_sec'] = [parameters['LogInterval_sec']]
     df_settings["DisplayWindow_sec"] = [parameters["DisplayWindow_sec"]]
@@ -193,9 +197,12 @@ def query_DHT_fakedata(temp_previous = 20, hum_previous=80):
 def updateIO(pi,parameters,vals):
     heater_pulseWidth = vals["HeaterPower"]*255
     humidifier_pulseWidth = vals["HumidifierPower"]*255
+    fan_pulseWidth = vals["FanPower"]*255
 
     pi.set_PWM_dutycycle(parameters["heater_pin"], heater_pulseWidth)
     pi.set_PWM_dutycycle(parameters["humidifier_pin"], humidifier_pulseWidth)
+    pi.set_PWM_dutycycle(parameters["fan_pin"], humidifier_pulseWidth)
+
     print("pin power levels updated")
 
 
@@ -289,6 +296,11 @@ if __name__ == "__main__":
 
             if temp_error > 0:
                 heater_DC = 0
+                fan_DC =(temp_error*parameters["fan_pid_kp"]+temp_slope*parameters["fan_pid_kd"])
+                if fan_DC < 0.1:
+                    fan_DC = 0
+                elif fan_DC > 1:
+                    fan_DC = 1
             else:
                 heater_DC = -1*(temp_error*parameters["heater_pid_kp"]+temp_slope*parameters["heater_pid_kd"])
                 if heater_DC > 1:
@@ -300,6 +312,7 @@ if __name__ == "__main__":
             # update vals dict
             vals["TemperatureC"] = temp
             vals["HeaterPower"] = heater_DC
+            vals["FanPower"] = fan_DC
 
             # make humidity control adjustments
             humidity_error = humidity-parameters["humiditySetPoint"]
@@ -318,12 +331,12 @@ if __name__ == "__main__":
             vals["Humidity"] = humidity
             vals["HumidifierPower"] = humidity_DC
 
+
+            #print status to console
             print("The temp error is:")
             print(temp_error)
             print("The humidity error is:")
             print(humidity_error)
-
-
             print(vals)
 
             # record values in short term memory
