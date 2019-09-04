@@ -43,7 +43,7 @@ timeOff = datetime.time(hourOff, minOff)
 isDayTime = (timeNow > timeOn and timeNow<timeOff)
 
 
-steps = 100 # number of discrete intensity steps
+steps = 1000 # number of discrete intensity steps
 incrementTime = sunriseDuration/(int(max_duty_cycle*steps)+1)
 
 
@@ -51,24 +51,6 @@ pi = pigpio.pi()
 pi.set_mode(pinNum, pigpio.ALT5)
 pi.hardware_PWM(pinNum, freq,0)#590000)
 
-print("testing light")
-pi.hardware_PWM(pinNum, freq,1000000)#590000)
-sleep(1)
-pi.hardware_PWM(pinNum, freq,750000)#590000)
-sleep(1)
-pi.hardware_PWM(pinNum, freq,500000)#590000)
-sleep(1)
-pi.hardware_PWM(pinNum, freq,250000)#590000)
-sleep(1)
-pi.hardware_PWM(pinNum, freq,0)#590000)
-sleep(1)
-for i in np.linspace(1, steps, steps):
-    print(i)
-    i = (i / steps / 2) * piConstant
-    i = int(n * sin(i))
-    pi.hardware_PWM(pinNum, freq, i)
-    sleep(incrementTime)
-print("entering main loop")
 
 
 

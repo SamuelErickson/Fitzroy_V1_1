@@ -211,7 +211,7 @@ if __name__ == "__main__":
     print("parameters retrieved from file")
     print(retrieve_update_values())
 
-    max_light_power = 0.5 #fraction of max light output
+    max_light_power = 1 #fraction of max light output
     sunrise_duration = 10 #seconds
 
     initiate_light(
