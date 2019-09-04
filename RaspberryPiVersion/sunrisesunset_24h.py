@@ -68,6 +68,7 @@ try:
             i = int(n*sin(i))
             pi.hardware_PWM(pinNum, freq,i)
             sleep(incrementTime)
+        pi.write(pinNum,1)
         while isDayTime: #daytime loop
             print("3")
             sleep(checktime_period)
