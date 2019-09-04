@@ -24,7 +24,7 @@ means drive light with raspberry pi pin 18, maximum duty cycle 0.75, sunrise/sun
  oscillation frequency 500 hz, on at 8:30 AM, off at 8:45 PM
 """
 
-checktime_period = 3 #period in seconds between checking time to see whether to proceed
+checktime_period = 60 #period in seconds between checking time to see whether to proceed
 
 pinNum = int(sys.argv[1])
 max_duty_cycle = float(sys.argv[2])
@@ -43,7 +43,7 @@ timeOff = datetime.time(hourOff, minOff)
 isDayTime = (timeNow > timeOn and timeNow<timeOff)
 
 
-steps = 1000 # number of discrete intensity steps
+steps = 300 # number of discrete intensity steps
 incrementTime = sunriseDuration/(int(max_duty_cycle*steps)+1)
 
 

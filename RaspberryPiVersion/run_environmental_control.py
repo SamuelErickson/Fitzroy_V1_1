@@ -212,7 +212,8 @@ if __name__ == "__main__":
     print(retrieve_update_values())
 
     max_light_power = 1 #fraction of max light output
-    sunrise_duration = 10 #seconds
+    sunrise_duration_min = 5
+    sunrise_duration = sunrise_duration_min*60 #seconds
 
     initiate_light(
         parameters["light_pin"],
