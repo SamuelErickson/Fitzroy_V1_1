@@ -201,7 +201,7 @@ def updateIO(pi,parameters,vals):
 
     pi.set_PWM_dutycycle(parameters["heater_pin"], heater_pulseWidth)
     pi.set_PWM_dutycycle(parameters["humidifier_pin"], humidifier_pulseWidth)
-    pi.set_PWM_dutycycle(parameters["fan_pin"], humidifier_pulseWidth)
+    pi.set_PWM_dutycycle(parameters["fan_pin"], fan_pulseWidth)
 
     print("pin power levels updated")
 
