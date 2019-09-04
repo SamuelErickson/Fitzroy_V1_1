@@ -115,8 +115,8 @@ def retrieve_update_values():
     parameters["humidifier_pid_ki"] = 0
 
     parameters["fan_pid_kp"] = 0.1
-    parameters["fan_humidifier_pid_kd"] = 0
-    parameters["fan_humidifier_pid_ki"] = 0
+    parameters["fan_pid_kd"] = 0
+    parameters["fan_pid_ki"] = 0
 
     # Intervals of about 2 seconds or less will eventually hang the DHT22.
     df_settings['LogInterval_sec'] = [parameters['LogInterval_sec']]
