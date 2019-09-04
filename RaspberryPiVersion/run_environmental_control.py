@@ -163,14 +163,14 @@ def initializeIO(parameters,vals):
     pi.set_PWM_dutycycle(parameters['humidifier_pin'], 0)
 
     # SAM - fix below, instead of defining new dictionary, simply edit existing values
-    vals = {"Time": None,
-            "TemperatureC": temp,
-            "Humidity": humidity,
-            "HeaterPower": 0,
-            "HumidifierPower": 0,
-            "FanPower": parameters["fanDC"], #changed this 8/29/2019 - Sam
-            "LightPower": 0
-            }
+
+    # Edit vals dictionary
+    vals["TemperatureC"] = temp
+    vals["Humidity"] = humidity
+    vals["HeaterPower"] = 0
+    vals["HumidifierPower"] = 0
+    vals["FanPower"] = 0
+    vals["LightStatus"] = "Not_Recorded"
 
     return pi, s, vals
 
@@ -243,12 +243,14 @@ if __name__ == "__main__":
 
     #initialize vals dictionary
     vals = {"Time": None,
+            "TempSetPoint": parameters["tempSetPoint"],
+            "HumiditySetPoint": parameters["humiditySetPoint"],
             "TemperatureC": "not_connected",
             "Humidity": "not_connected",
             "HeaterPower": "not_connected",
             "HumidifierPower": "not_connected",
             "FanPower": "not_connected",
-            "LightPower": "not_connected"
+            "LightStatus": "not_connected"
             }
 
     try:
