@@ -70,7 +70,7 @@ try:
             i = int(n*sin(i))
             pi.hardware_PWM(pinNum, freq,i)
             sleep(incrementTime)
-        pi.write(pinNum,1)  #On 100%
+        #pi.write(pinNum,1)  #On 100%
         while isDayTime: #daytime loop
             print("Daytime")
             sleep(checktime_period)
@@ -82,7 +82,7 @@ try:
             i = int(n*sin(i))
             pi.hardware_PWM(pinNum, freq,i)
             sleep(incrementTime)
-        pi.write(pinNum,0)  #On 100%
+        #pi.write(pinNum,0)  #On 100%
         #while not isDayTime: #nighttime loop
          #   sleep(checktime_period)
           #  timeNow = datetime.datetime.now().time()
