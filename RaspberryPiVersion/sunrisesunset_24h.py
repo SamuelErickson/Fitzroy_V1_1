@@ -45,7 +45,7 @@ timeOff = datetime.time(hourOff, minOff)
 isDayTime = (timeNow > timeOn and timeNow<timeOff)
 
 
-steps = 720 # number of discrete intensity steps
+steps = 1200 # number of discrete intensity steps
 incrementTime = sunriseDuration/(int(max_duty_cycle*steps)+1)
 
 
