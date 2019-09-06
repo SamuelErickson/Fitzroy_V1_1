@@ -26,7 +26,7 @@ means drive light with raspberry pi pin 18, maximum duty cycle 0.75, sunrise/sun
  WITH CURRENT SETTINGS CAN NOT CONTROL MAX LIGHT OUTPUT ALWAYS 100%
 """
 
-checktime_period = 60 #period in seconds between checking time to see whether to proceed
+checktime_period = 10 #period in seconds between checking time to see whether to proceed
 
 pinNum = int(sys.argv[1])
 max_duty_cycle = float(sys.argv[2])
