@@ -257,7 +257,7 @@ if __name__ == "__main__":
                 if period_count%period_kd==0: #Check whether it is time to increase the kd
                     parameters["heater_pid_kd"] =+ increment_kd
                     print("incrementing kd")
-                    print (parameters["heater_pid_kd")
+                    print(parameters["heater_pid_kd"])
 
             # get time
             timeCurrent = datetime.datetime.now()
