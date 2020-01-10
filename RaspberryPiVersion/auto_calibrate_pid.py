@@ -36,9 +36,9 @@ def retrieve_update_values():
     parameters = {} #initialize empty dictionary
 
     # call positional arguments passed to script execution statement
-    parameters["tempSetPoint"] = "NA"
-    parameters["humiditySetPoint"] = "NA"
-    parameters["fanDC"] = "NA"
+    parameters["tempSetPoint"] = 0
+    parameters["humiditySetPoint"] = 0
+    parameters["fanDC"] = 0
     parameters["sunriseTime"] = "NA"
     parameters["sunsetTime"] = "NA"
     parameters["photoperiod_h"] = "NA"
