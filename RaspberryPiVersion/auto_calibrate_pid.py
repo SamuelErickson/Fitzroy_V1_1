@@ -186,8 +186,11 @@ if __name__ == "__main__":
     parameters = retrieve_update_values()
     #find number of samples to store in short term memory
     maxSamples = floor(parameters["DisplayWindow_sec"]/parameters['LogInterval_sec'])
-    #open short term data as a pandas dataframe
-    df_s = pd.read_csv('data_calibration.csv')
+
+    #initialize the dataframe
+    df_s = pd.DataFrame(columns=["Time", "TemperatureC", "TempSetPoint", "Humidity", "HeaterPower", "HumidifierPower", "LightPower"])
+    df_s.to_csv("data_calibration.csv", index=False)
+
     #number of rows of data already stored in short term storage
     numSamples = df_s.shape[0]
 
