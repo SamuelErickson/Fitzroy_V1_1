@@ -225,106 +225,106 @@ if __name__ == "__main__":
         # get seconds since start of epoch
         next_reading = time.time()
 
-    #Initialize PID heater terms
-    parameters["heater_pid_kp"] = 0
-    parameters["heater_pid_ki"] = 0
-    parameters["heater_pid_kd"] = 0
+        #Initialize PID heater terms
+        parameters["heater_pid_kp"] = 0
+        parameters["heater_pid_ki"] = 0
+        parameters["heater_pid_kd"] = 0
 
-    #Plan calibration strategy
-    period_kd = 45/parameters['LogInterval_sec'] #number of periods to wait before changing kd term (45 seconds, so 15 sampling periods)
-    period_count = 0
-    increment_kd = 0.05 #the amount to increase kd every period_kd number of sample periods
-    parameters["tempSetPoint"] = 28 #temp set point 28C.
-
-
-
-    #Calibrate heater
-    print("Calibrating heater without fan")
-    print("while loop starting")
-    calibrating_heater = True
-    while calibrating_heater:
-        # increment count of sampling periods
-        period_count =+ 1
+        #Plan calibration strategy
+        period_kd = 45/parameters['LogInterval_sec'] #number of periods to wait before changing kd term (45 seconds, so 15 sampling periods)
+        period_count = 0
+        increment_kd = 0.05 #the amount to increase kd every period_kd number of sample periods
+        parameters["tempSetPoint"] = 28 #temp set point 28C.
 
 
-        # Describe the strategy, order of steps for calibration
-        adjusting_heater_kd = True #working on kd for heater
-        if adjusting_heater_kd:
-            if period_count < period_kd: #Allow for one sampling period with no adjusting first
-                adjust_heater = False
+
+        #Calibrate heater
+        print("Calibrating heater without fan")
+        print("while loop starting")
+        calibrating_heater = True
+        while calibrating_heater:
+            # increment count of sampling periods
+            period_count =+ 1
+
+
+            # Describe the strategy, order of steps for calibration
+            adjusting_heater_kd = True #working on kd for heater
+            if adjusting_heater_kd:
+                if period_count < period_kd: #Allow for one sampling period with no adjusting first
+                    adjust_heater = False
+                else:
+                    adjust_heater = True
+                if period_count%period_kd==0: #Check whether it is time to increase the kd
+                    parameters["heater_pid_kd"] =+ increment_kd
+                    print("incrementing kd")
+                    print (parameters["heater_pid_kd")
+
+            # get time
+            timeCurrent = datetime.datetime.now()
+            timeStamp = timeCurrent.isoformat()
+            vals["Time"] = timeStamp
+
+            # query DHT sensor
+            if not runningOnPC:
+                temp, humidity = query_DHT(s)
             else:
-                adjust_heater = True
-            if period_count%period_kd==0: #Check whether it is time to increase the kd
-                parameters["heater_pid_kd"] =+ increment_kd
-                print("incrementing kd")
-                print (parameters["heater_pid_kd")
+                temp, humidity = query_DHT_fakedata(temp_prev, humidity_prev)
 
-        # get time
-        timeCurrent = datetime.datetime.now()
-        timeStamp = timeCurrent.isoformat()
-        vals["Time"] = timeStamp
+            # make temperature control adjustments
+            temp_error = temp - parameters["tempSetPoint"]
+            dT = temp - temp_prev
+            temp_slope = dT / (parameters['LogInterval_sec'] / 60)  # in degC / minute
+            temp_error_integral = temp_error_integral+temp_error #sum of all temp_error over time
 
-        # query DHT sensor
-        if not runningOnPC:
-            temp, humidity = query_DHT(s)
-        else:
-            temp, humidity = query_DHT_fakedata(temp_prev, humidity_prev)
+            # Print the standard deviation from the last period_kd number of sample periods
+            if adjust_heater:
+                print("printing temperature data, last 5 measurements")
+                std_dev = df_s["TemperatureC"].iloc[-5:].to_list()
 
-        # make temperature control adjustments
-        temp_error = temp - parameters["tempSetPoint"]
-        dT = temp - temp_prev
-        temp_slope = dT / (parameters['LogInterval_sec'] / 60)  # in degC / minute
-        temp_error_integral = temp_error_integral+temp_error #sum of all temp_error over time
+            # Determine power supplied to heater
+            if False:
+                if temp_error > 0:
+                    heater_DC = 0
 
-        # Print the standard deviation from the last period_kd number of sample periods
-        if adjust_heater:
-            print("printing temperature data, last 5 measurements")
-            std_dev = df_s["TemperatureC"].iloc[-5:].to_list()
+                else:
+                    heater_DC = -1 * (temp_error * parameters["heater_pid_kp"] + temp_slope * parameters["heater_pid_kd"])
+                    if heater_DC > 1:
+                        heater_DC = 1
+                tempPrev = temp
+                vals["HeaterPower"] = heater_DC
 
-        # Determine power supplied to heater
-        if False:
-            if temp_error > 0:
-                heater_DC = 0
+            # update vals dict
+            vals["TemperatureC"] = temp
 
-            else:
-                heater_DC = -1 * (temp_error * parameters["heater_pid_kp"] + temp_slope * parameters["heater_pid_kd"])
-                if heater_DC > 1:
-                    heater_DC = 1
-            tempPrev = temp
-            vals["HeaterPower"] = heater_DC
+            # print status to console
+            print("The temp error is:")
+            print(temp_error)
+            print(vals)
 
-        # update vals dict
-        vals["TemperatureC"] = temp
+            # record values in short term memory
 
-        # print status to console
-        print("The temp error is:")
-        print(temp_error)
-        print(vals)
+            # if short term data not full
+            if (numSamples < maxSamples):
+                df_s = df_s.append(vals, ignore_index=True)
+                df_s.to_csv('data_calibration.csv', index=False)
+                numSamples = numSamples + 1
+            else:  # if short term data full
+                df_s = df_s.iloc[1:]
+                df_s = df_s.append(vals, ignore_index=True)
+                df_s.to_csv('data_calibration.csv', index=False)
 
-        # record values in short term memory
+            # record values in long term memory
+            # COME BACK TO THIS STEP
 
-        # if short term data not full
-        if (numSamples < maxSamples):
-            df_s = df_s.append(vals, ignore_index=True)
-            df_s.to_csv('data_calibration.csv', index=False)
-            numSamples = numSamples + 1
-        else:  # if short term data full
-            df_s = df_s.iloc[1:]
-            df_s = df_s.append(vals, ignore_index=True)
-            df_s.to_csv('data_calibration.csv', index=False)
+            # update duty cycle
+            if not runningOnPC:
+                updateIO(pi, parameters, vals)
 
-        # record values in long term memory
-        # COME BACK TO THIS STEP
-
-        # update duty cycle
-        if not runningOnPC:
-            updateIO(pi, parameters, vals)
-
-        # the query sensor step takes a varying amount of time. Find how much time needed to wait before next sensor query.
-        next_reading += parameters['LogInterval_sec']
-        sleepTime = next_reading - time.time()
-        if sleepTime > 0:
-            time.sleep(sleepTime)
+            # the query sensor step takes a varying amount of time. Find how much time needed to wait before next sensor query.
+            next_reading += parameters['LogInterval_sec']
+            sleepTime = next_reading - time.time()
+            if sleepTime > 0:
+                time.sleep(sleepTime)
 
 
 
