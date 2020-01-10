@@ -212,16 +212,17 @@ if __name__ == "__main__":
     # set following to True to use fake data and no IO connection
     runningOnPC = False
 
-    #initialize
+    #initialize parameters
     parameters = retrieve_update_values()
-
     print("parameters retrieved from file")
     print(retrieve_update_values())
 
-    max_light_power = 1 #fraction of max light output
+
+    max_light_power = 1 #max light output allowed, as a fraction of max bulb brightness
     sunrise_duration_min = 60
     sunrise_duration = sunrise_duration_min*60 #seconds
 
+    #initiate the light
     initiate_light(
         parameters["light_pin"],
         max_light_power,
@@ -232,6 +233,8 @@ if __name__ == "__main__":
         parameters["sunsetTime"].hour,
         parameters["sunsetTime"].minute
     )
+
+
 
     #find number of samples to store in short term memory
     maxSamples = floor(parameters["DisplayWindow_sec"]/parameters['LogInterval_sec'])
@@ -270,8 +273,13 @@ if __name__ == "__main__":
         else:
             temp_prev, humidity_prev = query_DHT_fakedata()
 
+        #initialize fan_DC
+        fan_DC = parameters["fanDC"]
+
         # get seconds since start of epoch
         next_reading = time.time()
+
+
 
         print("while loop starting")
 
